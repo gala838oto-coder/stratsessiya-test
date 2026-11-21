@@ -99,7 +99,7 @@ textarea:focus,select:focus{outline:none;border-color:var(--cyan);}
     <div class="brand">СТРАТСЕССИЯ<small>тестовый сбор данных · v1</small></div>
     <nav class="nav">
       <a href="#/" id="nav-form">АНКЕТА</a>
-      <a href="#/svodka" id="nav-dash">СВОДКА</a>
+      <a href="#/svodka" id="nav-dash">ДАШБОРД</a>
     </nav>
   </div>
 </header>
@@ -166,9 +166,10 @@ textarea:focus,select:focus{outline:none;border-color:var(--cyan);}
 <!-- ══════════ СВОДКА ══════════ -->
 <main id="view-dash" hidden>
   <div class="panel">
-    <h1>Сводка для модератора</h1>
-    <p class="lead">Агрегированные результаты из анкет, заполненных на этом устройстве, и из импортированных файлов
-      участников. Блок благодарностей — строго для модератора, группе не показываем.</p>
+    <h1>Дашборд — сводка оценок</h1>
+    <p class="lead">Так выглядит картина, которую модератор видит перед сессией: где узкое место, по каким звеньям
+      нет единого мнения, с каким ресурсом входит команда. Блок благодарностей — строго для модератора,
+      группе на реальной сессии его не показываем.</p>
   </div>
   <div id="dash-body"></div>
   <div class="panel">
@@ -206,6 +207,53 @@ const RESOURCE=['Энергия','Ясность целей','Доверие в 
 const NAMES=['А. Волкова','Д. Ким','М. Гареев','И. Сорокин','Е. Панова','О. Третьяк',
   'Р. Шаяхметов','Н. Одинцова','В. Кравцов','Л. Фомина','П. Садовников','Ю. Беркутова'];
 const LS_KEY='strat_test_v1';
+
+/* ── Демо-данные «компании-примера» (9 участников, ограничение — Производство).
+      Показываются в сводке, пока реальных анкет < 4, чтобы один человек
+      сразу увидел ценность дашборда. Детерминированный генератор. ── */
+function buildDemo(){
+  let s=42;const rnd=()=>((s=s*1664525+1013904223>>>0)/4294967296);
+  const clamp=v=>Math.max(1,Math.min(10,Math.round(v)));
+  const prof={ /* [обычный вопрос, обратный вопрос] базовые уровни по звеньям */
+    sales:[7,3],plan:[5,6],supply:[6,5],prod:[3,8],logi:[5,6],fin:[7,3]
+  };
+  const hypTexts={
+    prod:['Линия встаёт каждую неделю, все сроки упираются в цех','Очередь заказов перед производством растёт третий месяц','Цех не вывозит объём, остальные звенья простаивают','Всё горит из-за производства, оттуда и начинать','Узкое место — оборудование цеха, это видно по простоям'],
+    logi:['Отгрузки срываются на складе, машины ждут по полдня'],
+    plan:['Планерки есть, а плана фактически нет — каждый день аврал'],
+    supply:['Сырьё привозят в последний момент, производство стоит']
+  };
+  const retroG=['Запустили вторую смену','Закрыли крупный контракт','Навели порядок на складе','Сократили брак на линии','Новый менеджер по продажам вышел на план','Починили систему заявок в снабжение'];
+  const retroB=['Сорвали отгрузку ключевому клиенту','Потеряли неделю из-за простоя линии','Два заказа ушли конкуренту по срокам','Отчётность собирали вручную до ночи','Поставщик подвёл по срокам второй раз за квартал','Согласования в финансах заняли две недели'];
+  const retroL=['Планировать надо от ограничения','Запасы не спасают от узкого места','Сверять сроки до обещания клиенту','Межотдельские запросы надо фиксировать письменно','Простой виден только если его считаешь','Цифра без владельца не работает'];
+  const retroW=['Уход двух наладчиков','Рост цен на сырьё','Пенсионный возраст ключевых мастеров','Кассовые разрывы в декабре','Новый конкурент зашёл с демпингом','Износ основной линии — замена не запланирована'];
+  const exp=['Договориться, что чиним в первую очередь','Чтобы производство перестало быть вечным оправданием','Уйти с понятным планом, а не с протоколом','Честно увидеть, где мы тормозим сами','Чтобы решения дожили хотя бы до весны','Общая картина вместо шести отдельных правд'];
+  const grats=[['М. Гареев','Выручил со срочной закупкой'],['И. Сорокин','Держал смену в аврал'],['Е. Панова','Разрулила отгрузку в пятницу вечером']];
+  const hypKeys=['prod','prod','prod','prod','prod','logi','plan','supply','prod'];
+  return hypKeys.map((hk,i)=>{
+    const links={};
+    LINKS.forEach(l=>{
+      const [b,rb]=prof[l.id];
+      links[l.id]={skipped:false,scores:Q.map((_,qi)=>{
+        const rev=REV.includes(qi);
+        /* у трети участников мнение по планированию противоположное → демо флага σ
+           (на обратных вопросах сдвиг зеркальный: «всё хорошо» = низкий балл по обратному) */
+        const split=l.id==='plan'?(i%3===0?(rev?-5:5):(rev?3:-3)):0;
+        return clamp((rev?rb:b)+split+(rnd()-0.5)*2.4);
+      })};
+    });
+    const hyps=hypTexts[hk];
+    return {id:'demo'+(i+1),ts:'2026-11-2'+(i%9)+'T09:00:00.000Z',
+      hyp:{link:hk,text:hyps[i%hyps.length]},
+      links,
+      retro:{good:retroG[i%6],bad:retroB[(i+2)%6],learned:retroL[(i+4)%6],worry:retroW[i%6]},
+      grat:i<3?[{to:grats[i][0],what:grats[i][1]}]:[],
+      resource:[clamp(6+(rnd()-0.5)*3),clamp(6+(rnd()-0.5)*3),clamp(7+(rnd()-0.5)*3),clamp(7+(rnd()-0.5)*3)],
+      expect:exp[(i+1)%6]};
+  });
+}
+const DEMO_SUBS=buildDemo();
+const DEMO_MIN=4; /* меньше реальных анкет — сводка работает в демо-режиме */
 
 /* ── Хранилище ── */
 const store={
@@ -330,15 +378,15 @@ document.getElementById('submit').onclick=()=>{
   main.innerHTML='';
   const s=el('div','panel success');
   s.innerHTML='<div class="okcircle">✓</div><h1>Спасибо, анкета принята!</h1>'+
-    '<p class="lead" style="margin-top:8px">Ответы сохранены на этом устройстве. Если вы заполняете анкету не на компьютере модератора — скачайте файл со своими ответами и отправьте ему любым удобным способом: он добавит их в общую сводку.</p>';
+    '<p class="lead" style="margin-top:8px">Ваши ответы сохранены. Нажмите «Посмотреть дашборд» — увидите, во что превращаются ответы участников: пока показываем их на примере демо-компании, ваши оценки уже учтены. А файл со своими ответами скачайте и передайте модератору — он добавит их в общую сводку.</p>';
   const act=el('div','actions mt16');act.style.justifyContent='center';
-  const dl=el('button','btn btn-p','СКАЧАТЬ МОИ ОТВЕТЫ (JSON)');dl.style.width='auto';
+  const dash=el('button','btn btn-p','ПОСМОТРЕТЬ ДАШБОРД');dash.style.width='auto';
+  dash.onclick=()=>location.hash='#/svodka';
+  const dl=el('button','btn btn-o','СКАЧАТЬ МОИ ОТВЕТЫ (JSON)');
   dl.onclick=()=>download(sub,'strat-anketa-'+sub.id+'.json','application/json');
   const again=el('button','btn btn-o','ЗАПОЛНИТЬ ЕЩЁ РАЗ');
   again.onclick=()=>location.reload();
-  const dash=el('button','btn btn-o','ПОСМОТРЕТЬ СВОДКУ');
-  dash.onclick=()=>location.hash='#/svodka';
-  act.appendChild(dl);act.appendChild(again);act.appendChild(dash);
+  act.appendChild(dash);act.appendChild(dl);act.appendChild(again);
   s.appendChild(act);main.appendChild(s);
   window.scrollTo(0,0);
 };
@@ -353,7 +401,9 @@ function download(obj,fname,type){
 'use strict';
 /* ═══════════ СВОДКА (модератор) ═══════════ */
 function aggregate(){
-  const subs=store.load().subs;
+  const real=store.load().subs;
+  const demoMode=real.length<DEMO_MIN;
+  const subs=demoMode?DEMO_SUBS.concat(real):real;
   const links={};
   LINKS.forEach(l=>{
     const comps=subs.map(s=>linkComposite(s.links[l.id])).filter(v=>v!=null);
@@ -366,22 +416,26 @@ function aggregate(){
   const texts=k=>subs.map(s=>({v:(s.retro[k]||'').trim()})).filter(x=>x.v);
   const grat=subs.flatMap(s=>s.grat||[]).filter(g=>g.to||g.what);
   const expect=subs.map(s=>s.expect).filter(v=>v&&v.trim());
-  return {n:subs.length,links,ranked,res,texts,grat,expect,
+  return {n:subs.length,nReal:real.length,demoMode,links,ranked,res,texts,grat,expect,
     hyps:subs.map(s=>({link:s.hyp.link,text:s.hyp.text}))};
 }
 
 function renderDash(){
   const A=aggregate();const body=document.getElementById('dash-body');body.innerHTML='';
-  if(!A.n){
-    body.appendChild(el('div','panel','<p class="lead">Пока нет ни одной заполненной анкеты. Заполните сами по вкладке «Анкета» или импортируйте файлы участников кнопкой ниже.</p>'));
-    return;
+  if(A.demoMode){
+    const dm=el('div','panel');dm.style.borderColor='#fbbf2455';
+    dm.innerHTML='<h2 style="color:var(--amber)">Демо-режим</h2>'+
+      '<p class="lead mt8">Пока собрано реальных анкет: <b style="color:var(--amber)">'+A.nReal+'</b> — этого мало для статистики, поэтому ниже показаны демонстрационные данные компании-примера (9 участников)'+
+      (A.nReal?' <b>плюс ваши ответы</b> — они уже учтены в цифрах.':' — заполните анкету, и ваши ответы добавятся в цифры.')+
+      ' Как только наберётся '+DEMO_MIN+'+ реальные анкеты, демо-данные отключатся автоматически.</p>';
+    body.appendChild(dm);
   }
   /* Статистика */
   const stats=el('div','panel');
   stats.appendChild(el('h2',null,'Общая картина'));
   const g=el('div','grid2 mt8');g.style.gridTemplateColumns='repeat(4,1fr)';g.style.display='grid';
   const st=(v,l)=>{const s=el('div','stat');s.innerHTML=`<div class="v">${v}</div><div class="l">${l}</div>`;return s;};
-  g.appendChild(st(A.n,'анкет собрано'));
+  g.appendChild(st(A.n,'анкет в сводке'+(A.demoMode?' (демо)':'')));
   g.appendChild(st(A.grat.length,'благодарностей'));
   const worst=A.ranked[0];
   g.appendChild(st(worst?esc(worst.l.name):'—','главный кандидат в ограничения'));
