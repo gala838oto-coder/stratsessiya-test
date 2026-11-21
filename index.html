@@ -1,1 +1,512 @@
-Placeholder — real index.html pushed via main sync
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050810">
+<title>Стратсессия · тестовый сбор</title>
+<style>
+:root{
+  --bg:#050810; --panel:#0c1220; --panel2:#111a2b; --line:#1a2540; --line-soft:#141d33;
+  --ink:#dbe4f3; --dim:#8b98b2; --faint:#56617c;
+  --cyan:#22d3ee; --mint:#34d399; --amber:#fbbf24; --red:#f87171;
+}
+*{box-sizing:border-box; border-color:var(--line);}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+  font-family:'Inter',-apple-system,'Segoe UI','Noto Sans',sans-serif;-webkit-font-smoothing:antialiased;}
+.mono{font-family:'JetBrains Mono','PT Mono',ui-monospace,monospace;}
+header{position:sticky;top:0;z-index:40;background:#050810f2;backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+.hwrap{max-width:760px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.brand{font-family:'JetBrains Mono',monospace;font-weight:800;letter-spacing:.16em;font-size:12px;}
+.brand small{display:block;letter-spacing:0;font-weight:400;font-size:10px;color:var(--faint);font-family:'Inter',sans-serif;margin-top:2px;}
+.nav{display:flex;gap:6px;}
+.nav a{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.1em;
+  padding:7px 12px;border-radius:4px;text-decoration:none;border:1px solid var(--line);color:var(--dim);}
+.nav a.on{border-color:var(--cyan);color:var(--cyan);background:#22d3ee10;}
+main{max-width:760px;margin:0 auto;padding:18px 16px 60px;}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px;margin-bottom:16px;}
+h1{font-size:18px;margin:0 0 6px;line-height:1.25;}
+.lead{font-size:12px;line-height:1.55;color:var(--dim);margin:0;}
+.secnum{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;color:var(--cyan);margin-right:6px;}
+h2{font-size:15px;margin:0 0 4px;line-height:1.3;}
+.note{font-size:11px;line-height:1.5;color:var(--dim);margin:0 0 12px;}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
+.chip{border:1px solid var(--line);background:var(--panel2);color:var(--dim);border-radius:4px;
+  padding:8px 13px;font-size:12px;cursor:pointer;font-family:inherit;}
+.chip.on{border-color:var(--cyan);color:var(--cyan);background:#22d3ee1a;}
+textarea,select{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:4px;
+  color:var(--ink);padding:9px 11px;font-size:13px;font-family:inherit;line-height:1.45;resize:vertical;}
+textarea:focus,select:focus{outline:none;border-color:var(--cyan);}
+::placeholder{color:var(--faint);}
+.qrow{margin-bottom:12px;}
+.qlabel{font-size:11px;line-height:1.35;color:var(--dim);margin-bottom:5px;}
+.scale{display:flex;gap:4px;}
+.scale button{flex:1;height:34px;border-radius:4px;border:1px solid var(--line);background:var(--panel2);
+  color:var(--dim);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;cursor:pointer;}
+.scale button.on{background:var(--cyan);border-color:var(--cyan);color:#04121a;}
+.scale.off{opacity:.3;pointer-events:none;}
+.linkcard{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:12px;margin-bottom:10px;}
+.linkhead{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px;}
+.linkname{font-size:13px;font-weight:600;}
+.skip{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--dim);cursor:pointer;white-space:nowrap;}
+.skip input{accent-color:var(--cyan);}
+.grat{background:#34d3990a;border:1px solid #34d39933;border-radius:6px;padding:12px;margin-top:14px;}
+.grat h3{margin:0 0 4px;font-size:13px;color:var(--mint);}
+.btn{font-family:'JetBrains Mono',monospace;font-weight:800;letter-spacing:.12em;font-size:11px;
+  border-radius:4px;padding:12px 20px;cursor:pointer;border:1px solid transparent;}
+.btn-p{background:var(--cyan);color:#04121a;width:100%;}
+.btn-p:disabled{opacity:.3;cursor:not-allowed;}
+.btn-o{background:transparent;border-color:var(--line);color:var(--dim);}
+.btn-mint{background:transparent;border-color:#34d39955;color:var(--mint);}
+.center{text-align:center;}
+.faint{font-size:10px;color:var(--faint);}
+.mt8{margin-top:8px;} .mt16{margin-top:16px;}
+.bar{height:6px;border-radius:3px;background:var(--line-soft);overflow:hidden;}
+.bar i{display:block;height:100%;border-radius:3px;}
+.big{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:24px;line-height:1;}
+.dcard{background:var(--panel2);border:1px solid var(--line);border-left:3px solid var(--line);
+  border-radius:6px;padding:12px;margin-bottom:10px;}
+.dhead{display:flex;justify-content:space-between;align-items:baseline;gap:8px;}
+.dname{font-size:13px;font-weight:600;}
+.dmeta{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.08em;}
+.tag{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;letter-spacing:.1em;
+  padding:2px 7px;border-radius:3px;border:1px solid;}
+.t-crit{color:var(--red);border-color:#f8717155;background:#f8717114;}
+.t-watch{color:var(--amber);border-color:#fbbf2455;background:#fbbf2412;}
+.t-ok{color:var(--mint);border-color:#34d39955;background:#34d39912;}
+.textitem{background:var(--panel2);border:1px solid var(--line-soft);border-left:2px solid var(--cyan);
+  border-radius:4px;padding:8px 10px;font-size:12px;line-height:1.5;color:var(--dim);margin-bottom:6px;}
+.textitem b{color:var(--cyan);font-weight:600;}
+.textitem.warn{border-left-color:var(--mint);}
+.textitem.warn b{color:var(--mint);}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:560px){.grid2{grid-template-columns:1fr;}}
+.stat{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:10px 12px;}
+.stat .v{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:20px;}
+.stat .l{font-size:10px;color:var(--faint);margin-top:2px;}
+.actions{display:flex;flex-wrap:wrap;gap:8px;}
+.rank{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:20px;width:30px;flex-shrink:0;}
+.rankrow{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line-soft);}
+.rankrow:first-of-type{border-top:none;}
+.success{text-align:center;padding:30px 16px;}
+.okcircle{width:52px;height:52px;border-radius:50%;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;
+  font-size:22px;color:var(--mint);background:#34d3991a;border:1px solid #34d39955;}
+</style>
+</head>
+<body>
+<header>
+  <div class="hwrap">
+    <div class="brand">СТРАТСЕССИЯ<small>тестовый сбор данных · v1</small></div>
+    <nav class="nav">
+      <a href="#/" id="nav-form">АНКЕТА</a>
+      <a href="#/svodka" id="nav-dash">СВОДКА</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ══════════ АНКЕТА ══════════ -->
+<main id="view-form">
+  <div class="panel">
+    <h1>Подготовка к стратегической сессии</h1>
+    <p class="lead">Заполнение займёт 15–20 минут. Вопросы можно пропускать.
+      <b style="color:var(--mint)">Все оценки попадают только в анонимную сводку</b> — кроме благодарностей:
+      они поимённые, и их видит один модератор. Ответы хранятся на этом устройстве; после отправки вы сможете
+      скачать свой файл и передать модератору.</p>
+  </div>
+
+  <div class="panel">
+    <h2><span class="secnum">01</span>Где, по-вашему, сейчас узкое место компании?</h2>
+    <p class="note">Первым делом, на свежую голову — до того, как вы увидите чужие оценки. Единственный обязательный блок.</p>
+    <div class="chips" id="hyp-chips"></div>
+    <textarea id="hyp-text" rows="3" placeholder="Почему вы так считаете? Что там происходит на практике?"></textarea>
+  </div>
+
+  <div class="panel">
+    <h2><span class="secnum">02</span>Оцените звенья цепочки</h2>
+    <p class="note">Шкала 1–10. Если не хватает информации по звену — отметьте «не могу оценить».
+      * — обратные вопросы: высокая оценка по ним снижает общий балл звена.</p>
+    <div id="link-blocks"></div>
+  </div>
+
+  <div class="panel">
+    <h2><span class="secnum">03</span>Ретроспектива периода</h2>
+    <p class="note">Коротко, своими словами. Пишите как есть — сводка обезличена.</p>
+    <div class="qrow"><textarea id="r-good" rows="2" placeholder="Что получилось за период?"></textarea></div>
+    <div class="qrow"><textarea id="r-bad" rows="2" placeholder="Что не получилось?"></textarea></div>
+    <div class="qrow"><textarea id="r-learned" rows="2" placeholder="Чему научились?"></textarea></div>
+    <div class="qrow"><textarea id="r-worry" rows="2" placeholder="Что беспокоит сейчас?"></textarea></div>
+
+    <div class="grat">
+      <h3>Благодарности</h3>
+      <p class="note">Кому из коллег вы благодарны за этот период и за что? Поимённые благодарности видит только
+        модератор — в общую сводку они не попадают.</p>
+      <div id="grat-list"></div>
+      <button class="btn btn-mint" id="grat-add" type="button">+ ЕЩЁ БЛАГОДАРНОСТЬ</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2><span class="secnum">04</span>Ваш ресурс перед сессией</h2>
+    <p class="note">Честная самооценка 1–10. Сводка анонимна — она нужна модератору, чтобы понять, с чем входит команда.</p>
+    <div id="resource-rows"></div>
+  </div>
+
+  <div class="panel">
+    <h2><span class="secnum">05</span>Ожидания от сессии</h2>
+    <textarea id="expect" rows="3" placeholder="Что для вас будет значить, что сессия прошла не зря?"></textarea>
+  </div>
+
+  <div class="center">
+    <button class="btn btn-p" id="submit" type="button" disabled>ОТПРАВИТЬ АНКЕТУ</button>
+    <div class="faint mt8" id="submit-hint">Чтобы отправить, ответьте на блок 01 — про узкое место</div>
+    <div class="faint mt8">Тестовая версия: ответы сохраняются только на этом устройстве</div>
+  </div>
+</main>
+
+<!-- ══════════ СВОДКА ══════════ -->
+<main id="view-dash" hidden>
+  <div class="panel">
+    <h1>Сводка для модератора</h1>
+    <p class="lead">Агрегированные результаты из анкет, заполненных на этом устройстве, и из импортированных файлов
+      участников. Блок благодарностей — строго для модератора, группе не показываем.</p>
+  </div>
+  <div id="dash-body"></div>
+  <div class="panel">
+    <h2 style="margin-bottom:10px">Данные для анализа</h2>
+    <div class="actions">
+      <button class="btn btn-o" id="exp-json" type="button">ЭКСПОРТ JSON</button>
+      <button class="btn btn-o" id="exp-csv" type="button">ЭКСПОРТ CSV</button>
+      <button class="btn btn-o" id="imp-btn" type="button">ИМПОРТ JSON</button>
+      <button class="btn btn-o" id="clear" type="button" style="border-color:#f8717155;color:var(--red)">ОЧИСТИТЬ ВСЁ</button>
+      <input type="file" id="imp-file" accept=".json,application/json" multiple hidden>
+    </div>
+    <div class="faint mt8" id="imp-status"></div>
+    <div class="faint mt8">CSV — оценки в длинном формате (строка = участник × звено), открывается в Excel.
+      JSON — полная копия всех данных.</div>
+  </div>
+</main>
+
+<script>
+'use strict';
+/* ── Методология (зафиксированная терминология v1.2) ── */
+const LINKS=[
+  {id:'sales',name:'Продажи'},{id:'plan',name:'Планирование'},{id:'supply',name:'Снабжение'},
+  {id:'prod',name:'Производство'},{id:'logi',name:'Логистика'},{id:'fin',name:'Финансы'}
+];
+const Q=[
+  'Понимание зон ответственности и критериев оценки звена',
+  'Выполнение планов',
+  'Скорость реакции на запросы других отделов и изменения',
+  'Звено НЕ тормозит других',
+  'Качество на выходе',
+  'Проблемы звена системно повторяются'
+];
+const REV=[3,5]; /* обратные вопросы */
+const RESOURCE=['Энергия','Ясность целей','Доверие в команде','Готовность к изменениям'];
+const NAMES=['А. Волкова','Д. Ким','М. Гареев','И. Сорокин','Е. Панова','О. Третьяк',
+  'Р. Шаяхметов','Н. Одинцова','В. Кравцов','Л. Фомина','П. Садовников','Ю. Беркутова'];
+const LS_KEY='strat_test_v1';
+
+/* ── Хранилище ── */
+const store={
+  load(){try{return JSON.parse(localStorage.getItem(LS_KEY))||{subs:[]}}catch(e){return{subs:[]}}},
+  save(d){localStorage.setItem(LS_KEY,JSON.stringify(d))}
+};
+
+/* ── Скоринг: обратные вопросы переворачиваем, композит ×10 → 0–100 ── */
+const eff=(v,i)=>REV.includes(i)?11-v:v;
+function linkComposite(ans){ /* ans = {skipped, scores[6]} → 0–100 или null */
+  if(!ans||ans.skipped)return null;
+  const vals=ans.scores.map((v,i)=>v==null?null:eff(v,i)).filter(v=>v!=null);
+  if(!vals.length)return null;
+  return vals.reduce((a,b)=>a+b,0)/vals.length*10;
+}
+const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
+const std=a=>{if(a.length<2)return 0;const m=mean(a);return Math.sqrt(a.reduce((s,v)=>s+(v-m)*(v-m),0)/a.length);};
+const fmt=(v,d=0)=>v==null?'—':v.toFixed(d);
+const statusOf=m=>m==null?null:m<45?['ОГРАНИЧЕНИЕ','t-crit']:m<65?['НАБЛЮДЕНИЕ','t-watch']:['В НОРМЕ','t-ok'];
+const colorOf=m=>m==null?'var(--faint)':m<45?'var(--red)':m<65?'var(--amber)':'var(--mint)';
+
+/* ── Мини-утилиты DOM ── */
+const el=(tag,cls,html)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+</script>
+<script>
+'use strict';
+/* ═══════════ АНКЕТА ═══════════ */
+const state={hypLink:null,links:{},grat:[],resource:[null,null,null,null]};
+LINKS.forEach(l=>{state.links[l.id]={skipped:false,scores:[null,null,null,null,null,null]};});
+
+/* Блок 01: выбор звена */
+const hypChips=document.getElementById('hyp-chips');
+LINKS.forEach(l=>{
+  const b=el('button','chip',esc(l.name));b.type='button';
+  b.onclick=()=>{state.hypLink=l.id;[...hypChips.children].forEach(c=>c.classList.remove('on'));b.classList.add('on');checkSubmit();};
+  hypChips.appendChild(b);
+});
+const hypText=document.getElementById('hyp-text');
+hypText.addEventListener('input',checkSubmit);
+function checkSubmit(){
+  const ok=state.hypLink&&hypText.value.trim().length>0;
+  document.getElementById('submit').disabled=!ok;
+  document.getElementById('submit-hint').style.opacity=ok?'.35':'1';
+}
+
+/* Блок 02: звенья × 6 вопросов */
+const linkBlocks=document.getElementById('link-blocks');
+LINKS.forEach(l=>{
+  const card=el('div','linkcard');
+  const head=el('div','linkhead');
+  head.appendChild(el('span','linkname',esc(l.name)));
+  const skipLab=el('label','skip');
+  const skipIn=document.createElement('input');skipIn.type='checkbox';
+  skipLab.appendChild(skipIn);skipLab.appendChild(document.createTextNode('не могу оценить'));
+  head.appendChild(skipLab);card.appendChild(head);
+  const rows=[];
+  Q.forEach((q,qi)=>{
+    const row=el('div','qrow');
+    row.appendChild(el('div','qlabel',esc(q)+(REV.includes(qi)?' *':'')));
+    const sc=el('div','scale');
+    for(let v=1;v<=10;v++){
+      const b=el('button','scale',String(v));b.type='button';b.textContent=v;
+      b.onclick=()=>{
+        state.links[l.id].scores[qi]=v;
+        [...sc.children].forEach(c=>c.classList.toggle('on',+c.textContent===v));
+      };
+      sc.appendChild(b);
+    }
+    row.appendChild(sc);card.appendChild(row);rows.push(row);
+  });
+  skipIn.onchange=()=>{
+    state.links[l.id].skipped=skipIn.checked;
+    rows.forEach(r=>r.querySelector('.scale').classList.toggle('off',skipIn.checked));
+  };
+  linkBlocks.appendChild(card);
+});
+
+/* Блок 03: благодарности */
+const gratList=document.getElementById('grat-list');
+function addGrat(){
+  const row=el('div','grid2');row.style.marginBottom='8px';
+  const sel=document.createElement('select');
+  sel.innerHTML='<option value="">Кому…</option>'+NAMES.map(n=>`<option>${esc(n)}</option>`).join('');
+  const what=document.createElement('textarea');what.rows=1;what.placeholder='За что…';
+  const idx=state.grat.length;state.grat.push({to:'',what:''});
+  sel.onchange=()=>state.grat[idx].to=sel.value;
+  what.addEventListener('input',()=>state.grat[idx].what=what.value);
+  row.appendChild(sel);row.appendChild(what);gratList.appendChild(row);
+}
+document.getElementById('grat-add').onclick=addGrat;addGrat();
+
+/* Блок 04: ресурс */
+const resRows=document.getElementById('resource-rows');
+RESOURCE.forEach((r,ri)=>{
+  const row=el('div','qrow');
+  row.appendChild(el('div','qlabel',esc(r)));
+  const sc=el('div','scale');
+  for(let v=1;v<=10;v++){
+    const b=el('button','scale',String(v));b.type='button';b.textContent=v;
+    b.onclick=()=>{state.resource[ri]=v;[...sc.children].forEach(c=>c.classList.toggle('on',+c.textContent===v));};
+    sc.appendChild(b);
+  }
+  row.appendChild(sc);resRows.appendChild(row);
+});
+
+/* Отправка */
+document.getElementById('submit').onclick=()=>{
+  const d=store.load();
+  const sub={
+    id:'a'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),
+    ts:new Date().toISOString(),
+    hyp:{link:state.hypLink,text:hypText.value.trim()},
+    links:JSON.parse(JSON.stringify(state.links)),
+    retro:{good:gv('r-good'),bad:gv('r-bad'),learned:gv('r-learned'),worry:gv('r-worry')},
+    grat:state.grat.filter(g=>g.to||g.what.trim()),
+    resource:state.resource.slice(),
+    expect:gv('expect')
+  };
+  d.subs.push(sub);store.save(d);
+  const main=document.getElementById('view-form');
+  main.innerHTML='';
+  const s=el('div','panel success');
+  s.innerHTML='<div class="okcircle">✓</div><h1>Спасибо, анкета принята!</h1>'+
+    '<p class="lead" style="margin-top:8px">Ответы сохранены на этом устройстве. Если вы заполняете анкету не на компьютере модератора — скачайте файл со своими ответами и отправьте ему любым удобным способом: он добавит их в общую сводку.</p>';
+  const act=el('div','actions mt16');act.style.justifyContent='center';
+  const dl=el('button','btn btn-p','СКАЧАТЬ МОИ ОТВЕТЫ (JSON)');dl.style.width='auto';
+  dl.onclick=()=>download(sub,'strat-anketa-'+sub.id+'.json','application/json');
+  const again=el('button','btn btn-o','ЗАПОЛНИТЬ ЕЩЁ РАЗ');
+  again.onclick=()=>location.reload();
+  const dash=el('button','btn btn-o','ПОСМОТРЕТЬ СВОДКУ');
+  dash.onclick=()=>location.hash='#/svodka';
+  act.appendChild(dl);act.appendChild(again);act.appendChild(dash);
+  s.appendChild(act);main.appendChild(s);
+  window.scrollTo(0,0);
+};
+const gv=id=>document.getElementById(id).value.trim();
+function download(obj,fname,type){
+  const blob=obj instanceof Blob?obj:new Blob([JSON.stringify(obj,null,2)],{type:type||'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname;a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),3000);
+}
+</script>
+<script>
+'use strict';
+/* ═══════════ СВОДКА (модератор) ═══════════ */
+function aggregate(){
+  const subs=store.load().subs;
+  const links={};
+  LINKS.forEach(l=>{
+    const comps=subs.map(s=>linkComposite(s.links[l.id])).filter(v=>v!=null);
+    links[l.id]={comps,mean:mean(comps),sd:std(comps)/10,n:comps.length, /* σ в шкале 1–10, как в методологии */
+      mentions:subs.filter(s=>s.hyp.link===l.id).length};
+  });
+  const ranked=LINKS.map(l=>({l,...links[l.id]})).filter(x=>x.mean!=null)
+    .sort((a,b)=>(100-b.mean)-(100-a.mean)); /* хуже всех — первым */
+  const res=[0,1,2,3].map(i=>mean(subs.map(s=>s.resource[i]).filter(v=>v!=null)));
+  const texts=k=>subs.map(s=>({v:(s.retro[k]||'').trim()})).filter(x=>x.v);
+  const grat=subs.flatMap(s=>s.grat||[]).filter(g=>g.to||g.what);
+  const expect=subs.map(s=>s.expect).filter(v=>v&&v.trim());
+  return {n:subs.length,links,ranked,res,texts,grat,expect,
+    hyps:subs.map(s=>({link:s.hyp.link,text:s.hyp.text}))};
+}
+
+function renderDash(){
+  const A=aggregate();const body=document.getElementById('dash-body');body.innerHTML='';
+  if(!A.n){
+    body.appendChild(el('div','panel','<p class="lead">Пока нет ни одной заполненной анкеты. Заполните сами по вкладке «Анкета» или импортируйте файлы участников кнопкой ниже.</p>'));
+    return;
+  }
+  /* Статистика */
+  const stats=el('div','panel');
+  stats.appendChild(el('h2',null,'Общая картина'));
+  const g=el('div','grid2 mt8');g.style.gridTemplateColumns='repeat(4,1fr)';g.style.display='grid';
+  const st=(v,l)=>{const s=el('div','stat');s.innerHTML=`<div class="v">${v}</div><div class="l">${l}</div>`;return s;};
+  g.appendChild(st(A.n,'анкет собрано'));
+  g.appendChild(st(A.grat.length,'благодарностей'));
+  const worst=A.ranked[0];
+  g.appendChild(st(worst?esc(worst.l.name):'—','главный кандидат в ограничения'));
+  g.appendChild(st(worst?fmt(worst.mean):'—','его балл из 100'));
+  stats.appendChild(g);body.appendChild(stats);
+
+  /* Карта звеньев */
+  const ch=el('div','panel');
+  ch.appendChild(el('h2',null,'Звенья цепочки — сводные оценки'));
+  ch.appendChild(el('p','note','Балл 0–100: среднее по 6 вопросам (обратные перевёрнуты) × 10. * σ ≥ 2.5 — у участников нет единой картины по звену; требует дополнительного анализа и обсуждения.'));
+  A.ranked.forEach(x=>{
+    const stt=statusOf(x.mean);
+    const d=el('div','dcard');d.style.borderLeftColor=colorOf(x.mean);
+    const h=el('div','dhead');
+    h.innerHTML=`<div><span class="dname">${esc(x.l.name)}</span>
+      <span class="dmeta" style="margin-left:8px">n=${x.n}${x.sd>=2.5?' · σ '+x.sd.toFixed(1)+' ⚠':''} · в гипотезах: ${x.mentions}</span></div>
+      <div style="display:flex;gap:8px;align-items:center"><span class="tag ${stt[1]}">${stt[0]}</span>
+      <span class="big" style="color:${colorOf(x.mean)}">${fmt(x.mean)}</span></div>`;
+    d.appendChild(h);
+    const bar=el('div','bar mt8');bar.innerHTML=`<i style="width:${x.mean}%;background:${colorOf(x.mean)}"></i>`;
+    d.appendChild(bar);ch.appendChild(d);
+  });
+  body.appendChild(ch);
+
+  /* Гипотезы об ограничении */
+  const hy=el('div','panel');
+  hy.appendChild(el('h2',null,'Гипотезы об узком месте (блок 01, анонимно)'));
+  A.hyps.forEach(h=>{
+    const ln=(LINKS.find(l=>l.id===h.link)||{}).name||'—';
+    hy.appendChild(el('div','textitem',`<b>${esc(ln)}:</b> ${esc(h.text)}`));
+  });
+  body.appendChild(hy);
+
+  /* Ресурс */
+  const rs=el('div','panel');
+  rs.appendChild(el('h2',null,'Ресурс команды перед сессией (средние)'));
+  const rg=el('div','grid2 mt8');
+  RESOURCE.forEach((r,i)=>{
+    const v=A.res[i];
+    const s=el('div','stat');
+    s.innerHTML=`<div class="v" style="color:${v==null?'var(--faint)':colorOf(v*10)}">${fmt(v,1)}</div>
+      <div class="l">${esc(r)}</div>
+      <div class="bar mt8"><i style="width:${v?v*10:0}%;background:${colorOf(v?v*10:null)}"></i></div>`;
+    rg.appendChild(s);
+  });
+  rs.appendChild(rg);body.appendChild(rs);
+
+  /* Ретроспектива */
+  const rt=el('div','panel');
+  rt.appendChild(el('h2',null,'Ретроспектива (анонимно)'));
+  [['good','Что получилось'],['bad','Что не получилось'],['learned','Чему научились'],['worry','Что беспокоит']].forEach(([k,label])=>{
+    const arr=A.texts(k);if(!arr.length)return;
+    rt.appendChild(el('h3','mono mt16',label)).style.cssText='font-size:11px;color:var(--cyan);margin:14px 0 6px;letter-spacing:.08em';
+    arr.forEach(t=>rt.appendChild(el('div','textitem',esc(t.v))));
+  });
+  body.appendChild(rt);
+
+  /* Благодарности — ТОЛЬКО МОДЕРАТОРУ */
+  if(A.grat.length){
+    const gr=el('div','panel');gr.style.borderColor='#34d39944';
+    gr.appendChild(el('h2',null,'Благодарности <span class="tag t-ok" style="vertical-align:2px">ТОЛЬКО МОДЕРАТОРУ</span>'));
+    gr.appendChild(el('p','note','Поимённые благодарности. Группе не показываем — во избежание конфликтов и обид.'));
+    A.grat.forEach(g2=>gr.appendChild(el('div','textitem warn',`<b>${esc(g2.to||'—')}:</b> ${esc(g2.what||'')}`)));
+    body.appendChild(gr);
+  }
+
+  /* Ожидания */
+  if(A.expect.length){
+    const ex=el('div','panel');
+    ex.appendChild(el('h2',null,'Ожидания от сессии (анонимно)'));
+    A.expect.forEach(t=>ex.appendChild(el('div','textitem',esc(t))));
+    body.appendChild(ex);
+  }
+}
+
+/* ═══════════ ЭКСПОРТ / ИМПОРТ ═══════════ */
+document.getElementById('exp-json').onclick=()=>{
+  const d=store.load();
+  download({meta:{tool:'stratsessiya-test',v:1,exported:new Date().toISOString()},subs:d.subs},
+    'strat-svodka-'+new Date().toISOString().slice(0,10)+'.json');
+};
+document.getElementById('exp-csv').onclick=()=>{
+  const subs=store.load().subs;
+  const rows=[['id_анкеты','дата','звено','балл_звена_0_100','пропуск',...Q.map((q,i)=>'в'+(i+1)+(REV.includes(i)?'_обратный':''))]];
+  subs.forEach(s=>LINKS.forEach(l=>{
+    const a=s.links[l.id];
+    rows.push([s.id,s.ts,l.name,a?(linkComposite(a)!=null?linkComposite(a).toFixed(0):''):'',a&&a.skipped?'да':'',
+      ...(a?a.scores.map(v=>v==null?'':v):['','','','','',''])]);
+  }));
+  const csv='﻿'+rows.map(r=>r.map(c=>String(c).replace(/;/g,',')).join(';')).join('\r\n');
+  download(new Blob([csv],{type:'text/csv;charset=utf-8'}),'strat-otsenki-'+new Date().toISOString().slice(0,10)+'.csv');
+};
+const impFile=document.getElementById('imp-file');
+document.getElementById('imp-btn').onclick=()=>impFile.click();
+impFile.onchange=async()=>{
+  const d=store.load();let added=0;
+  for(const f of impFile.files){
+    try{
+      const j=JSON.parse(await f.text());
+      const arr=j.subs?j.subs:(j.id?[j]:[]); // полный экспорт ИЛИ одиночная анкета
+      arr.forEach(s=>{if(s&&s.id&&!d.subs.some(x=>x.id===s.id)){d.subs.push(s);added++;}});
+    }catch(e){}
+  }
+  store.save(d);impFile.value='';
+  document.getElementById('imp-status').textContent=
+    added?('Импортировано анкет: '+added+'. Всего в сводке: '+d.subs.length+'.'):'Новых анкет не найдено (возможно, эти файлы уже импортированы).';
+  renderDash();
+};
+document.getElementById('clear').onclick=()=>{
+  if(confirm('Удалить ВСЕ собранные анкеты с этого устройства? Действие необратимо. Перед очисткой рекомендую экспортировать JSON.')){
+    localStorage.removeItem(LS_KEY);renderDash();
+    document.getElementById('imp-status').textContent='Все данные удалены.';
+  }
+};
+
+/* ═══════════ РОУТЕР ═══════════ */
+function route(){
+  const dash=location.hash==='#/svodka';
+  document.getElementById('view-form').hidden=dash;
+  document.getElementById('view-dash').hidden=!dash;
+  document.getElementById('nav-form').classList.toggle('on',!dash);
+  document.getElementById('nav-dash').classList.toggle('on',dash);
+  if(dash)renderDash();
+}
+window.addEventListener('hashchange',route);route();
+</script>
+</body>
+</html>
