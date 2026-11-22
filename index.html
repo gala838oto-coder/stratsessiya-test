@@ -46,6 +46,7 @@ textarea:focus,select:focus{outline:none;border-color:var(--cyan);}
   color:var(--dim);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;cursor:pointer;}
 .scale button.on{background:var(--cyan);border-color:var(--cyan);color:#04121a;}
 .scale.off{opacity:.3;pointer-events:none;}
+.scale-labels{display:flex;justify-content:space-between;font-size:9px;color:var(--faint);margin-top:3px;}
 .linkcard{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:12px;margin-bottom:10px;}
 .linkhead{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px;}
 .linkname{font-size:13px;font-weight:600;}
@@ -97,7 +98,7 @@ textarea:focus,select:focus{outline:none;border-color:var(--cyan);}
 <body>
 <header>
   <div class="hwrap">
-    <div class="brand">СТРАТСЕССИЯ<small>тестовый сбор данных · v1</small></div>
+    <div class="brand">СТРАТСЕССИЯ<small>тестовый сбор данных · v1.2</small></div>
     <nav class="nav">
       <a href="#/" id="nav-form">АНКЕТА</a>
       <a href="#/svodka" id="nav-dash">ДАШБОРД</a>
@@ -118,13 +119,16 @@ textarea:focus,select:focus{outline:none;border-color:var(--cyan);}
 
   <div class="panel">
     <h2><span class="secnum">01</span>Где, по-вашему, сейчас узкое место компании?</h2>
-    <p class="note">Первым делом, на свежую голову — до того, как вы увидите чужие оценки. Единственный обязательный блок.</p>
+    <p class="note">Узкое место — звено, которое ограничивает результат всей цепочки: из-за него копятся очереди
+      и срываются сроки, а остальные вынуждены ждать или подстраиваться. Спрашиваем первым делом, на свежую голову —
+      до того, как вы увидите чужие оценки.</p>
     <div class="chips" id="hyp-chips"></div>
     <textarea id="hyp-text" rows="3" placeholder="Почему вы так считаете? Что там происходит на практике?"></textarea>
+    <div class="faint" style="margin-top:5px">Блок обязательный: без выбора звена и обоснования анкета не отправится.</div>
   </div>
 
   <div class="panel">
-    <h2><span class="secnum">02</span>Оцените звенья цепочки</h2>
+    <h2><span class="secnum">02</span>Оцените звенья цепочки создания ценности</h2>
     <p class="note">Шкала 1–10. Если не хватает информации по звену — отметьте «не могу оценить».
       * — обратные вопросы: высокая оценка по ним снижает общий балл звена.</p>
     <div id="link-blocks"></div>
@@ -148,8 +152,8 @@ textarea:focus,select:focus{outline:none;border-color:var(--cyan);}
   </div>
 
   <div class="panel">
-    <h2><span class="secnum">04</span>Ваш ресурс перед сессией</h2>
-    <p class="note">Честная самооценка 1–10. Сводка анонимна — она нужна модератору, чтобы понять, с чем входит команда.</p>
+    <h2><span class="secnum">04</span>Ваш настрой перед сессией</h2>
+    <p class="note">Честная оценка 1–10. Сводка анонимна — она нужна модератору, чтобы понять, с чем входит команда.</p>
     <div id="resource-rows"></div>
   </div>
 
@@ -171,7 +175,7 @@ textarea:focus,select:focus{outline:none;border-color:var(--cyan);}
   <div class="panel">
     <h1>Дашборд — сводка оценок</h1>
     <p class="lead">Так выглядит картина, которую модератор видит перед сессией: где узкое место, по каким звеньям
-      нет единого мнения, с каким ресурсом входит команда. Блок благодарностей — строго для модератора,
+      нет единого мнения, с каким настроем входит команда. Блок благодарностей — строго для модератора,
       группе на реальной сессии его не показываем.</p>
   </div>
   <div id="dash-body"></div>
@@ -198,18 +202,18 @@ const LINKS=[
   {id:'prod',name:'Производство'},{id:'logi',name:'Логистика'},{id:'fin',name:'Финансы'}
 ];
 const Q=[
-  'Понимание зон ответственности и критериев оценки звена',
+  'Сотрудники звена понимают свою зону ответственности и критерии оценки их работы',
   'Выполнение планов',
   'Скорость реакции на запросы других отделов и изменения',
-  'Звено НЕ тормозит других',
+  'Из-за этого звена у других звеньев срываются сроки',
   'Качество на выходе',
   'Проблемы звена системно повторяются'
 ];
 const REV=[3,5]; /* обратные вопросы */
-const RESOURCE=['Энергия','Ясность целей','Доверие в команде','Готовность к изменениям'];
+const RESOURCE=['Уровень моей энергии','Я понимаю цели сессии','Уровень доверия в команде','Готовность команды к изменениям'];
 const NAMES=['А. Волкова','Д. Ким','М. Гареев','И. Сорокин','Е. Панова','О. Третьяк',
   'Р. Шаяхметов','Н. Одинцова','В. Кравцов','Л. Фомина','П. Садовников','Ю. Беркутова'];
-const LS_KEY='strat_test_v1';
+const LS_KEY='strat_test_v2';
 
 /* ── Демо-данные «компании-примера» (9 участников, ограничение — Производство).
       Показываются в сводке, пока реальных анкет < 4, чтобы один человек
@@ -281,6 +285,7 @@ const colorOf=m=>m==null?'var(--faint)':m<45?'var(--red)':m<65?'var(--amber)':'v
 /* ── Мини-утилиты DOM ── */
 const el=(tag,cls,html)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const scaleLabels=(l,r)=>{const d=el('div','scale-labels');d.innerHTML='<span>'+l+'</span><span>'+r+'</span>';return d;};
 </script>
 <script>
 'use strict';
@@ -326,7 +331,9 @@ LINKS.forEach(l=>{
       };
       sc.appendChild(b);
     }
-    row.appendChild(sc);card.appendChild(row);rows.push(row);
+    row.appendChild(sc);
+    row.appendChild(scaleLabels('1 — совсем не согласен','10 — полностью согласен'));
+    card.appendChild(row);rows.push(row);
   });
   skipIn.onchange=()=>{
     state.links[l.id].skipped=skipIn.checked;
@@ -360,7 +367,9 @@ RESOURCE.forEach((r,ri)=>{
     b.onclick=()=>{state.resource[ri]=v;[...sc.children].forEach(c=>c.classList.toggle('on',+c.textContent===v));};
     sc.appendChild(b);
   }
-  row.appendChild(sc);resRows.appendChild(row);
+  row.appendChild(sc);
+  row.appendChild(scaleLabels('1 — низкий','10 — высокий'));
+  resRows.appendChild(row);
 });
 
 /* Отправка */
@@ -474,7 +483,7 @@ function renderDash(){
 
   /* Ресурс */
   const rs=el('div','panel');
-  rs.appendChild(el('h2',null,'Ресурс команды перед сессией (средние)'));
+  rs.appendChild(el('h2',null,'Настрой команды перед сессией (средние)'));
   const rg=el('div','grid2 mt8');
   RESOURCE.forEach((r,i)=>{
     const v=A.res[i];
