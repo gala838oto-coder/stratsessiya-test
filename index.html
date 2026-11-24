@@ -30,14 +30,15 @@ h1{font-size:18px;margin:0 0 6px;line-height:1.25;}
 .lead{font-size:12px;line-height:1.55;color:var(--dim);margin:0;}
 .secnum{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;color:var(--cyan);margin-right:6px;}
 h2{font-size:15px;margin:0 0 4px;line-height:1.3;}
+h3.sub{font-size:12px;margin:14px 0 6px;color:var(--ink);}
 .note{font-size:11px;line-height:1.5;color:var(--dim);margin:0 0 12px;}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
 .chip{border:1px solid var(--line);background:var(--panel2);color:var(--dim);border-radius:4px;
   padding:8px 13px;font-size:12px;cursor:pointer;font-family:inherit;}
 .chip.on{border-color:var(--cyan);color:var(--cyan);background:#22d3ee1a;}
-textarea,select{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:4px;
+textarea,select,input[type=number]{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:4px;
   color:var(--ink);padding:9px 11px;font-size:13px;font-family:inherit;line-height:1.45;resize:vertical;}
-textarea:focus,select:focus{outline:none;border-color:var(--cyan);}
+textarea:focus,select:focus,input[type=number]:focus{outline:none;border-color:var(--cyan);}
 ::placeholder{color:var(--faint);}
 .qrow{margin-bottom:12px;}
 .qlabel{font-size:11px;line-height:1.35;color:var(--dim);margin-bottom:5px;}
@@ -79,26 +80,37 @@ textarea:focus,select:focus{outline:none;border-color:var(--cyan);}
 .textitem{background:var(--panel2);border:1px solid var(--line-soft);border-left:2px solid var(--cyan);
   border-radius:4px;padding:8px 10px;font-size:12px;line-height:1.5;color:var(--dim);margin-bottom:6px;}
 .textitem b{color:var(--cyan);font-weight:600;}
+.textitem i{color:var(--mint);font-style:normal;}
 .textitem.warn{border-left-color:var(--mint);}
 .textitem.warn b{color:var(--mint);}
+.textitem.fear{border-left-color:var(--amber);}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-@media(max-width:560px){.grid2{grid-template-columns:1fr;}}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+@media(max-width:560px){.grid2,.grid3{grid-template-columns:1fr;}}
 .stat{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:10px 12px;}
 .stat .v{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:20px;}
 .stat .l{font-size:10px;color:var(--faint);margin-top:2px;}
 .actions{display:flex;flex-wrap:wrap;gap:8px;}
-.rank{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:20px;width:30px;flex-shrink:0;}
-.rankrow{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line-soft);}
-.rankrow:first-of-type{border-top:none;}
 .success{text-align:center;padding:30px 16px;}
 .okcircle{width:52px;height:52px;border-radius:50%;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;
   font-size:22px;color:var(--mint);background:#34d3991a;border:1px solid #34d39955;}
+/* мастер шагов */
+.step{display:none;}
+.step.on{display:block;}
+.prog{height:4px;background:var(--line-soft);border-radius:2px;overflow:hidden;}
+.prog i{display:block;height:100%;background:var(--cyan);transition:width .25s;}
+.pnav{display:flex;justify-content:space-between;gap:8px;margin-top:16px;}
+.pnav .btn-p{flex:1;}
+.rowitem{background:var(--panel2);border:1px solid var(--line-soft);border-radius:6px;padding:10px;margin-bottom:8px;position:relative;}
+.rowitem textarea+textarea,.rowitem select+textarea{margin-top:6px;}
+.rm{position:absolute;top:4px;right:8px;background:none;border:none;color:var(--faint);cursor:pointer;font-size:13px;padding:4px;}
+.rm:hover{color:var(--red);}
 </style>
 </head>
 <body>
 <header>
   <div class="hwrap">
-    <div class="brand">СТРАТСЕССИЯ<small>тестовый сбор данных · v1.2</small></div>
+    <div class="brand">СТРАТСЕССИЯ<small>тестовый сбор данных · v1.3</small></div>
     <nav class="nav">
       <a href="#/" id="nav-form">АНКЕТА</a>
       <a href="#/svodka" id="nav-dash">ДАШБОРД</a>
@@ -106,71 +118,142 @@ textarea:focus,select:focus{outline:none;border-color:var(--cyan);}
   </div>
 </header>
 
-<!-- ══════════ АНКЕТА ══════════ -->
+<!-- ══════════ АНКЕТА (мастер из 7 шагов) ══════════ -->
 <main id="view-form">
-  <div class="panel">
-    <h1>Подготовка к стратегической сессии</h1>
-    <p class="lead">Заполнение займёт 15–20 минут. Вопросы можно пропускать.
-      <b style="color:var(--mint)">Все оценки попадают только в анонимную сводку</b> — кроме благодарностей:
-      они поимённые, и их видит один модератор. Ответы хранятся на этом устройстве; после отправки вы сможете
-      скачать свой файл и передать модератору. Хотите сначала увидеть, во что превращаются ответы?
-      Откройте <a href="#/svodka" style="color:var(--cyan)">демо-дашборд</a> — и возвращайтесь заполнять.</p>
-  </div>
-
-  <div class="panel">
-    <h2><span class="secnum">01</span>Где, по-вашему, сейчас узкое место компании?</h2>
-    <p class="note">Узкое место — звено, которое ограничивает результат всей цепочки: из-за него копятся очереди
-      и срываются сроки, а остальные вынуждены ждать или подстраиваться. Спрашиваем первым делом, на свежую голову —
-      до того, как вы увидите чужие оценки.</p>
-    <div class="chips" id="hyp-chips"></div>
-    <textarea id="hyp-text" rows="3" placeholder="Почему вы так считаете? Что там происходит на практике?"></textarea>
-    <div class="faint" style="margin-top:5px">Блок обязательный: без выбора звена и обоснования анкета не отправится.</div>
-  </div>
-
-  <div class="panel">
-    <h2><span class="secnum">02</span>Оцените звенья цепочки создания ценности</h2>
-    <p class="note">Шкала 1–10. Если не хватает информации по звену — отметьте «не могу оценить».
-      * — обратные вопросы: высокая оценка по ним снижает общий балл звена.</p>
-    <div id="link-blocks"></div>
-  </div>
-
-  <div class="panel">
-    <h2><span class="secnum">03</span>Ретроспектива периода</h2>
-    <p class="note">Коротко, своими словами. Пишите как есть — сводка обезличена.</p>
-    <div class="qrow"><textarea id="r-good" rows="2" placeholder="Что получилось за период?"></textarea></div>
-    <div class="qrow"><textarea id="r-bad" rows="2" placeholder="Что не получилось?"></textarea></div>
-    <div class="qrow"><textarea id="r-learned" rows="2" placeholder="Чему научились?"></textarea></div>
-    <div class="qrow"><textarea id="r-worry" rows="2" placeholder="Что беспокоит сейчас?"></textarea></div>
-
-    <div class="grat">
-      <h3>Благодарности</h3>
-      <p class="note">Кому из коллег вы благодарны за этот период и за что? Поимённые благодарности видит только
-        модератор — в общую сводку они не попадают.</p>
-      <div id="grat-list"></div>
-      <button class="btn btn-mint" id="grat-add" type="button">+ ЕЩЁ БЛАГОДАРНОСТЬ</button>
+  <div class="panel" style="padding:12px 16px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline">
+      <span class="mono" id="step-name" style="font-size:11px;color:var(--cyan);font-weight:800;letter-spacing:.08em">УЗКОЕ МЕСТО</span>
+      <span class="faint mono" id="step-num">ШАГ 1 ИЗ 7</span>
     </div>
+    <div class="prog" style="margin-top:8px"><i id="prog-i" style="width:14.3%"></i></div>
   </div>
 
-  <div class="panel">
-    <h2><span class="secnum">04</span>Ваш настрой перед сессией</h2>
-    <p class="note">Честная оценка 1–10. Сводка анонимна — она нужна модератору, чтобы понять, с чем входит команда.</p>
-    <div id="resource-rows"></div>
-  </div>
+  <!-- Шаг 1: гипотеза об узком месте -->
+  <section class="step on" data-step="0">
+    <div class="panel">
+      <h1>Подготовка к стратегической сессии</h1>
+      <p class="lead">Заполнение займёт 15–20 минут. Вопросы можно пропускать — кроме первого блока.
+        <b style="color:var(--mint)">Все оценки попадают только в анонимную сводку</b> — кроме благодарностей:
+        они поимённые, и их видит один модератор. Хотите сначала увидеть, во что превращаются ответы?
+        Откройте <a href="#/svodka" style="color:var(--cyan)">демо-дашборд</a> — и возвращайтесь заполнять.</p>
+    </div>
+    <div class="panel">
+      <h2><span class="secnum">01</span>Где, по-вашему, сейчас узкое место компании?</h2>
+      <p class="note">Узкое место — звено, которое ограничивает результат всей цепочки: из-за него копятся очереди
+        и срываются сроки, а остальные вынуждены ждать или подстраиваться. Спрашиваем первым делом, на свежую голову —
+        до того, как вы увидите чужие оценки.</p>
+      <div class="qlabel">Какое звено?</div>
+      <div class="chips" id="hyp-chips"></div>
+      <div class="qlabel">Тип ограничения (если понятно):</div>
+      <div class="chips" id="hyp-type"></div>
+      <div class="qlabel">К какому направлению относится?</div>
+      <div class="chips" id="hyp-dir"></div>
+      <textarea id="hyp-text" rows="3" placeholder="Почему вы так считаете? Что там происходит на практике?"></textarea>
+      <div class="faint" style="margin-top:5px">Блок обязательный: без выбора звена и обоснования анкета не отправится.</div>
+    </div>
+  </section>
 
-  <div class="panel">
-    <h2><span class="secnum">05</span>Ожидания от сессии</h2>
-    <textarea id="expect" rows="3" placeholder="Что для вас будет значить, что сессия прошла не зря?"></textarea>
-  </div>
+  <!-- Шаг 2: оценка звеньев -->
+  <section class="step" data-step="1">
+    <div class="panel">
+      <h2><span class="secnum">02</span>Оцените звенья цепочки создания ценности</h2>
+      <p class="note">Шкала 1–10. Если не хватает информации по звену — отметьте «не могу оценить».
+        * — обратные вопросы: высокая оценка по ним снижает общий балл звена.</p>
+      <div id="link-blocks"></div>
+    </div>
+  </section>
 
-  <div class="center">
-    <button class="btn btn-p" id="submit" type="button" disabled>ОТПРАВИТЬ АНКЕТУ</button>
-    <div class="faint mt8" id="submit-hint">Чтобы отправить, ответьте на блок 01 — про узкое место</div>
-    <div class="mt16"><a class="btn btn-o" href="#/svodka" style="display:inline-block;text-decoration:none">СНАЧАЛА ПОСМОТРЕТЬ ДЕМО-ДАШБОРД →</a></div>
-    <div class="faint mt16">Тестовая версия: ответы сохраняются только на этом устройстве</div>
+  <!-- Шаг 3: ретроспектива -->
+  <section class="step" data-step="2">
+    <div class="panel">
+      <h2><span class="secnum">03</span>Ретроспектива периода</h2>
+      <p class="note">3–5 пунктов на блок, коротко и по делу. Сводка обезличена.</p>
+
+      <h3 class="sub">Главные достижения и прорывы</h3>
+      <p class="note">Что конкретно сделали — и какой измеримый результат получили (в цифрах/фактах)?</p>
+      <div id="ach-list"></div>
+      <button class="btn btn-o" id="ach-add" type="button">+ ДОБАВИТЬ ДОСТИЖЕНИЕ</button>
+
+      <h3 class="sub">Главные ошибки и уроки</h3>
+      <p class="note">В чём ошиблись / что не сработало — и какой управленческий вывод сделали?</p>
+      <div id="mis-list"></div>
+      <button class="btn btn-o" id="mis-add" type="button">+ ДОБАВИТЬ ОШИБКУ</button>
+
+      <h3 class="sub">Что беспокоит сейчас?</h3>
+      <textarea id="r-worry" rows="2" placeholder="Свободная форма"></textarea>
+    </div>
+  </section>
+
+  <!-- Шаг 4: благодарности -->
+  <section class="step" data-step="3">
+    <div class="panel">
+      <h2><span class="secnum">04</span>Благодарности</h2>
+      <div class="grat" style="margin-top:0">
+        <h3>Кому из коллег вы благодарны за этот период?</h3>
+        <p class="note">Поимённые благодарности видит только модератор — в общую сводку они не попадают.
+          Третий вопрос важен: он превращает благодарность в условие успеха, которое стоит повторить.</p>
+        <div id="grat-list"></div>
+        <button class="btn btn-mint" id="grat-add" type="button">+ ЕЩЁ БЛАГОДАРНОСТЬ</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Шаг 5: оценка периода -->
+  <section class="step" data-step="4">
+    <div class="panel">
+      <h2><span class="secnum">05</span>Оценка периода</h2>
+      <p class="note">Поставьте периоду общий балл — и назовите три главные причины, чего не хватило до 10 из 10.</p>
+      <div class="qlabel">Ваша оценка периода</div>
+      <div class="scale" id="period-scale"></div>
+      <div id="period-labels"></div>
+      <h3 class="sub">Три главные причины, почему не 10</h3>
+      <div class="qrow"><textarea id="pr-1" rows="1" placeholder="Причина 1"></textarea></div>
+      <div class="qrow"><textarea id="pr-2" rows="1" placeholder="Причина 2"></textarea></div>
+      <div class="qrow"><textarea id="pr-3" rows="1" placeholder="Причина 3"></textarea></div>
+    </div>
+  </section>
+
+  <!-- Шаг 6: настрой -->
+  <section class="step" data-step="5">
+    <div class="panel">
+      <h2><span class="secnum">06</span>Ваш настрой перед сессией</h2>
+      <p class="note">Честная оценка 1–10. Сводка анонимна — она нужна модератору, чтобы понять, с чем входит команда.</p>
+      <div id="resource-rows"></div>
+      <h3 class="sub">И пара цифр за последние 3 месяца (в процентах)</h3>
+      <div class="grid3">
+        <div><div class="qlabel">% задач, которые приносили удовольствие</div><input type="number" id="pct-fun" min="0" max="100" placeholder="0–100"></div>
+        <div><div class="qlabel">% времени на стратегию — факт</div><input type="number" id="pct-capf" min="0" max="100" placeholder="0–100"></div>
+        <div><div class="qlabel">% времени на стратегию — готов(а) в новом периоде</div><input type="number" id="pct-capp" min="0" max="100" placeholder="0–100"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Шаг 7: ожидания и страх -->
+  <section class="step" data-step="6">
+    <div class="panel">
+      <h2><span class="secnum">07</span>Ожидания от сессии</h2>
+      <div class="qrow">
+        <div class="qlabel">Что для вас будет лучшим результатом сессии? Без чего уходить нельзя?</div>
+        <textarea id="expect-best" rows="2"></textarea>
+      </div>
+      <div class="qrow">
+        <div class="qlabel">Ваш главный страх: что может пойти не так на сессии или после неё?</div>
+        <textarea id="expect-fear" rows="2"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- Навигация мастера -->
+  <div class="pnav">
+    <button class="btn btn-o" id="btn-back" type="button" style="visibility:hidden">← НАЗАД</button>
+    <button class="btn btn-p" id="btn-next" type="button" disabled>ДАЛЕЕ →</button>
   </div>
+  <div class="faint mt8 center" id="nav-hint">Чтобы идти дальше, ответьте на блок 01 — про узкое место</div>
+  <div class="center mt16"><a class="btn btn-o" href="#/svodka" style="display:inline-block;text-decoration:none">СНАЧАЛА ПОСМОТРЕТЬ ДЕМО-ДАШБОРД →</a></div>
+  <div class="faint mt16 center">Тестовая версия: ответы сохраняются только на этом устройстве</div>
 </main>
 
-<!-- ══════════ СВОДКА ══════════ -->
+<!-- ══════════ ДАШБОРД (модератор) ══════════ -->
 <main id="view-dash" hidden>
   <div class="panel">
     <h1>Дашборд — сводка оценок</h1>
@@ -196,7 +279,7 @@ textarea:focus,select:focus{outline:none;border-color:var(--cyan);}
 
 <script>
 'use strict';
-/* ── Методология (зафиксированная терминология v1.2) ── */
+/* ── Методология (зафиксированная терминология v1.2/1.3) ── */
 const LINKS=[
   {id:'sales',name:'Продажи'},{id:'plan',name:'Планирование'},{id:'supply',name:'Снабжение'},
   {id:'prod',name:'Производство'},{id:'logi',name:'Логистика'},{id:'fin',name:'Финансы'}
@@ -209,11 +292,13 @@ const Q=[
   'Качество на выходе',
   'Проблемы звена системно повторяются'
 ];
-const REV=[3,5]; /* обратные вопросы */
+const REV=[3,5]; /* обратные вопросы: формулируем прямо негативно, без «НЕ» */
 const RESOURCE=['Уровень моей энергии','Я понимаю цели сессии','Уровень доверия в команде','Готовность команды к изменениям'];
+const TYPES={capacity:'Мощность',market:'Рынок',rules:'Правила'};
+const DIRS=['Целевой продукт','Сервис','Производительность','Другое'];
 const NAMES=['А. Волкова','Д. Ким','М. Гареев','И. Сорокин','Е. Панова','О. Третьяк',
   'Р. Шаяхметов','Н. Одинцова','В. Кравцов','Л. Фомина','П. Садовников','Ю. Беркутова'];
-const LS_KEY='strat_test_v2';
+const LS_KEY='strat_test_v3';
 
 /* ── Демо-данные «компании-примера» (9 участников, ограничение — Производство).
       Показываются в сводке, пока реальных анкет < 4, чтобы один человек
@@ -224,18 +309,20 @@ function buildDemo(){
   const prof={ /* [обычный вопрос, обратный вопрос] базовые уровни по звеньям */
     sales:[7,3],plan:[5,6],supply:[6,5],prod:[3,8],logi:[5,6],fin:[7,3]
   };
-  const hypTexts={
-    prod:['Линия встаёт каждую неделю, все сроки упираются в цех','Очередь заказов перед производством растёт третий месяц','Цех не вывозит объём, остальные звенья простаивают','Всё горит из-за производства, оттуда и начинать','Узкое место — оборудование цеха, это видно по простоям'],
-    logi:['Отгрузки срываются на складе, машины ждут по полдня'],
-    plan:['Планерки есть, а плана фактически нет — каждый день аврал'],
-    supply:['Сырьё привозят в последний момент, производство стоит']
+  const hypDefs={
+    prod:{type:'capacity',dir:'Производительность',texts:['Линия встаёт каждую неделю, все сроки упираются в цех','Очередь заказов перед производством растёт третий месяц','Цех не вывозит объём, остальные звенья простаивают','Всё горит из-за производства, оттуда и начинать','Узкое место — оборудование цеха, это видно по простоям']},
+    logi:{type:'capacity',dir:'Сервис',texts:['Отгрузки срываются на складе, машины ждут по полдня']},
+    plan:{type:'rules',dir:'Производительность',texts:['Планерки есть, а плана фактически нет — каждый день аврал']},
+    supply:{type:'market',dir:'Целевой продукт',texts:['Сырьё привозят в последний момент, производство стоит']}
   };
-  const retroG=['Запустили вторую смену','Закрыли крупный контракт','Навели порядок на складе','Сократили брак на линии','Новый менеджер по продажам вышел на план','Починили систему заявок в снабжение'];
-  const retroB=['Сорвали отгрузку ключевому клиенту','Потеряли неделю из-за простоя линии','Два заказа ушли конкуренту по срокам','Отчётность собирали вручную до ночи','Поставщик подвёл по срокам второй раз за квартал','Согласования в финансах заняли две недели'];
-  const retroL=['Планировать надо от ограничения','Запасы не спасают от узкого места','Сверять сроки до обещания клиенту','Межотдельские запросы надо фиксировать письменно','Простой виден только если его считаешь','Цифра без владельца не работает'];
-  const retroW=['Уход двух наладчиков','Рост цен на сырьё','Пенсионный возраст ключевых мастеров','Кассовые разрывы в декабре','Новый конкурент зашёл с демпингом','Износ основной линии — замена не запланирована'];
+  const ach=[['Запустили вторую смену','Выпуск вырос с 420 до 610 единиц в месяц'],['Закрыли крупный контракт','1,2 млн ₽, загрузка цеха на 3 месяца вперёд'],['Навели порядок на складе','Поиск позиции: 25 мин → 7 мин'],['Сократили брак на линии','С 4,1% до 2,6% за квартал'],['Новый менеджер по продажам вышел на план','7 сделок на 3,4 млн ₽ за квартал'],['Починили систему заявок в снабжение','Согласование заявки: 5 дней → 1 день']];
+  const mis=[['Сорвали отгрузку ключевому клиенту','Сроки считать от ограничения, а не от склада'],['Потеряли неделю из-за простоя линии','Профилактику нельзя откладывать «на после сезона»'],['Два заказа ушли конкуренту по срокам','Нельзя обещать срок до проверки загрузки цеха'],['Отчётность собирали вручную до ночи','Цифра без владельца не работает — назначать ответственного'],['Поставщик подвёл по срокам второй раз','Дублирующий поставщик на критичные позиции'],['Согласования в финансах заняли две недели','Лимиты вместо согласований: рамка вместо переписки']];
+  const worry=['Уход двух наладчиков','Рост цен на сырьё','Пенсионный возраст ключевых мастеров','Кассовые разрывы в декабре','Новый конкурент зашёл с демпингом','Износ основной линии — замена не запланирована'];
+  const grats=[['М. Гареев','Выручил со срочной закупкой','Личный контакт с поставщиком — повторять через договор, а не героизм'],['И. Сорокин','Держал смену в аврал','Сработал запасной график пересменок'],['Е. Панова','Разрулила отгрузку в пятницу вечером','Машину забронировали заранее, а не в день отгрузки']];
+  const perScore=[6,7,6,5,7,6,6,7,5];
+  const reasons=[['Нет прозрачных планов по загрузке цеха','Много ручной работы в отчётности','Решения принимаются медленно'],['Кадровый голод в цехе','Срывы сроков перед клиентами','Пожары вместо плановой работы']];
   const exp=['Договориться, что чиним в первую очередь','Чтобы производство перестало быть вечным оправданием','Уйти с понятным планом, а не с протоколом','Честно увидеть, где мы тормозим сами','Чтобы решения дожили хотя бы до весны','Общая картина вместо шести отдельных правд'];
-  const grats=[['М. Гареев','Выручил со срочной закупкой'],['И. Сорокин','Держал смену в аврал'],['Е. Панова','Разрулила отгрузку в пятницу вечером']];
+  const fear=['Решения снова не доживут до весны','Производство отобьёт любые выводы цифрами «с поля»','Сессия закончится протоколом, а не планом','Все согласятся в зале и разойдутся в цехах','Не хватит данных, спор перейдёт в мнения','Найдём ограничение, но побоимся его трогать'];
   const hypKeys=['prod','prod','prod','prod','prod','logi','plan','supply','prod'];
   return hypKeys.map((hk,i)=>{
     const links={};
@@ -249,14 +336,18 @@ function buildDemo(){
         return clamp((rev?rb:b)+split+(rnd()-0.5)*2.4);
       })};
     });
-    const hyps=hypTexts[hk];
+    const hd=hypDefs[hk];
     return {id:'demo'+(i+1),ts:'2026-11-2'+(i%9)+'T09:00:00.000Z',
-      hyp:{link:hk,text:hyps[i%hyps.length]},
+      hyp:{link:hk,type:hd.type,direction:hd.dir,text:hd.texts[i%hd.texts.length]},
       links,
-      retro:{good:retroG[i%6],bad:retroB[(i+2)%6],learned:retroL[(i+4)%6],worry:retroW[i%6]},
-      grat:i<3?[{to:grats[i][0],what:grats[i][1]}]:[],
+      retro:{achievements:[{what:ach[i%6][0],result:ach[i%6][1]},{what:ach[(i+3)%6][0],result:ach[(i+3)%6][1]}],
+             mistakes:[{what:mis[i%6][0],lesson:mis[i%6][1]}],
+             worry:worry[i%6]},
+      grat:i<3?[{to:grats[i][0],what:grats[i][1],why:grats[i][2]}]:[],
+      period:{score:perScore[i],reasons:reasons[i%2]},
       resource:[clamp(6+(rnd()-0.5)*3),clamp(6+(rnd()-0.5)*3),clamp(7+(rnd()-0.5)*3),clamp(7+(rnd()-0.5)*3)],
-      expect:exp[(i+1)%6]};
+      pct:{fun:Math.round(35+rnd()*35),capFact:Math.round(3+rnd()*8),capPlan:Math.round(10+rnd()*18)},
+      expect:{best:exp[(i+1)%6],fear:fear[i%6]}};
   });
 }
 const DEMO_SUBS=buildDemo();
@@ -290,25 +381,35 @@ const scaleLabels=(l,r)=>{const d=el('div','scale-labels');d.innerHTML='<span>'+
 <script>
 'use strict';
 /* ═══════════ АНКЕТА ═══════════ */
-const state={hypLink:null,links:{},grat:[],resource:[null,null,null,null]};
+const state={hypLink:null,hypType:null,hypDir:null,links:{},ach:[],mis:[],grat:[],
+  period:{score:null},resource:[null,null,null,null]};
 LINKS.forEach(l=>{state.links[l.id]={skipped:false,scores:[null,null,null,null,null,null]};});
 
-/* Блок 01: выбор звена */
-const hypChips=document.getElementById('hyp-chips');
-LINKS.forEach(l=>{
-  const b=el('button','chip',esc(l.name));b.type='button';
-  b.onclick=()=>{state.hypLink=l.id;[...hypChips.children].forEach(c=>c.classList.remove('on'));b.classList.add('on');checkSubmit();};
-  hypChips.appendChild(b);
-});
+/* Одноразовый выбор из чипов */
+function chips(containerId, items, onPick){
+  const box=document.getElementById(containerId);
+  items.forEach(it=>{
+    const val=Array.isArray(it)?it[0]:it, label=Array.isArray(it)?it[1]:it;
+    const b=el('button','chip',esc(label));b.type='button';
+    b.onclick=()=>{const was=b.classList.contains('on');
+      [...box.children].forEach(c=>c.classList.remove('on'));
+      if(!was)b.classList.add('on');
+      onPick(was?null:val);};
+    box.appendChild(b);
+  });
+}
+chips('hyp-chips',LINKS.map(l=>[l.id,l.name]),v=>{state.hypLink=v;checkStep0();});
+chips('hyp-type',Object.entries(TYPES),v=>{state.hypType=v;});
+chips('hyp-dir',DIRS,v=>{state.hypDir=v;});
 const hypText=document.getElementById('hyp-text');
-hypText.addEventListener('input',checkSubmit);
-function checkSubmit(){
+hypText.addEventListener('input',checkStep0);
+function checkStep0(){
   const ok=state.hypLink&&hypText.value.trim().length>0;
-  document.getElementById('submit').disabled=!ok;
-  document.getElementById('submit-hint').style.opacity=ok?'.35':'1';
+  if(curStep===0)document.getElementById('btn-next').disabled=!ok;
+  document.getElementById('nav-hint').style.opacity=ok?'.35':'1';
 }
 
-/* Блок 02: звенья × 6 вопросов */
+/* Шаг 2: звенья × 6 вопросов */
 const linkBlocks=document.getElementById('link-blocks');
 LINKS.forEach(l=>{
   const card=el('div','linkcard');
@@ -342,21 +443,55 @@ LINKS.forEach(l=>{
   linkBlocks.appendChild(card);
 });
 
-/* Блок 03: благодарности */
-const gratList=document.getElementById('grat-list');
-function addGrat(){
-  const row=el('div','grid2');row.style.marginBottom='8px';
-  const sel=document.createElement('select');
-  sel.innerHTML='<option value="">Кому…</option>'+NAMES.map(n=>`<option>${esc(n)}</option>`).join('');
-  const what=document.createElement('textarea');what.rows=1;what.placeholder='За что…';
-  const idx=state.grat.length;state.grat.push({to:'',what:''});
-  sel.onchange=()=>state.grat[idx].to=sel.value;
-  what.addEventListener('input',()=>state.grat[idx].what=what.value);
-  row.appendChild(sel);row.appendChild(what);gratList.appendChild(row);
+/* Повторяющиеся строки (достижения, ошибки, благодарности) */
+function rowFactory(listId, arr, fields, addBtnId, startRows){
+  const listEl=document.getElementById(listId);
+  function add(){
+    const item={};fields.forEach(f=>item[f.k]='');arr.push(item);
+    const row=el('div','rowitem');
+    const rm=el('button','rm','✕');rm.type='button';rm.title='Удалить';
+    rm.onclick=()=>{const i=arr.indexOf(item);if(i>-1)arr.splice(i,1);row.remove();};
+    row.appendChild(rm);
+    fields.forEach((f,fi)=>{
+      let inp;
+      if(f.type==='select'){
+        inp=document.createElement('select');
+        inp.innerHTML='<option value="">'+esc(f.ph)+'</option>'+f.options.map(o=>`<option>${esc(o)}</option>`).join('');
+        inp.onchange=()=>item[f.k]=inp.value;
+      }else{
+        inp=document.createElement('textarea');inp.rows=f.rows||1;inp.placeholder=f.ph;
+        inp.addEventListener('input',()=>item[f.k]=inp.value);
+      }
+      if(fi>0)inp.style.marginTop='6px';
+      if(fi===0)inp.style.width='calc(100% - 24px)';
+      row.appendChild(inp);
+    });
+    listEl.appendChild(row);
+  }
+  document.getElementById(addBtnId).onclick=add;
+  for(let i=0;i<(startRows||1);i++)add();
 }
-document.getElementById('grat-add').onclick=addGrat;addGrat();
+rowFactory('ach-list',state.ach,[
+  {k:'what',ph:'Что конкретно сделали / где прорыв?',rows:1},
+  {k:'result',ph:'Измеримый результат (в цифрах/фактах)',rows:1}],'ach-add',1);
+rowFactory('mis-list',state.mis,[
+  {k:'what',ph:'В чём ошиблись / что не сработало?',rows:1},
+  {k:'lesson',ph:'Управленческий вывод на будущее',rows:1}],'mis-add',1);
+rowFactory('grat-list',state.grat,[
+  {k:'to',type:'select',ph:'Кому…',options:NAMES},
+  {k:'what',ph:'За что конкретно?',rows:1},
+  {k:'why',ph:'Благодаря чему это стало возможно (условие успеха)?',rows:1}],'grat-add',1);
 
-/* Блок 04: ресурс */
+/* Шаг 5: оценка периода */
+const perScale=document.getElementById('period-scale');
+for(let v=1;v<=10;v++){
+  const b=el('button','scale',String(v));b.type='button';b.textContent=v;
+  b.onclick=()=>{state.period.score=v;[...perScale.children].forEach(c=>c.classList.toggle('on',+c.textContent===v));};
+  perScale.appendChild(b);
+}
+document.getElementById('period-labels').appendChild(scaleLabels('1 — провальный','10 — отличный'));
+
+/* Шаг 6: настрой */
 const resRows=document.getElementById('resource-rows');
 RESOURCE.forEach((r,ri)=>{
   const row=el('div','qrow');
@@ -372,18 +507,44 @@ RESOURCE.forEach((r,ri)=>{
   resRows.appendChild(row);
 });
 
+/* ── Мастер шагов ── */
+const STEP_NAMES=['УЗКОЕ МЕСТО','ОЦЕНКА ЗВЕНЬЕВ','РЕТРОСПЕКТИВА','БЛАГОДАРНОСТИ','ОЦЕНКА ПЕРИОДА','НАСТРОЙ','ОЖИДАНИЯ'];
+const steps=[...document.querySelectorAll('#view-form .step')];
+let curStep=0;
+const btnBack=document.getElementById('btn-back'),btnNext=document.getElementById('btn-next');
+function showStep(n){
+  curStep=Math.max(0,Math.min(steps.length-1,n));
+  steps.forEach(s=>s.classList.toggle('on',+s.dataset.step===curStep));
+  document.getElementById('step-name').textContent=STEP_NAMES[curStep];
+  document.getElementById('step-num').textContent='ШАГ '+(curStep+1)+' ИЗ '+steps.length;
+  document.getElementById('prog-i').style.width=((curStep+1)/steps.length*100)+'%';
+  btnBack.style.visibility=curStep===0?'hidden':'visible';
+  btnNext.textContent=curStep===steps.length-1?'ОТПРАВИТЬ АНКЕТУ':'ДАЛЕЕ →';
+  document.getElementById('nav-hint').style.visibility=curStep===0?'visible':'hidden';
+  checkStep0();window.scrollTo(0,0);
+}
+btnBack.onclick=()=>showStep(curStep-1);
+btnNext.onclick=()=>{curStep===steps.length-1?submitAnketa():showStep(curStep+1);};
+
 /* Отправка */
-document.getElementById('submit').onclick=()=>{
+const gv=id=>document.getElementById(id).value.trim();
+const gnum=id=>{const v=document.getElementById(id).value;return v===''?null:Math.max(0,Math.min(100,+v));};
+function submitAnketa(){
   const d=store.load();
   const sub={
     id:'a'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),
     ts:new Date().toISOString(),
-    hyp:{link:state.hypLink,text:hypText.value.trim()},
+    hyp:{link:state.hypLink,type:state.hypType,direction:state.hypDir,text:hypText.value.trim()},
     links:JSON.parse(JSON.stringify(state.links)),
-    retro:{good:gv('r-good'),bad:gv('r-bad'),learned:gv('r-learned'),worry:gv('r-worry')},
-    grat:state.grat.filter(g=>g.to||g.what.trim()),
+    retro:{achievements:state.ach.filter(r=>r.what.trim()||r.result.trim()),
+           mistakes:state.mis.filter(r=>r.what.trim()||r.lesson.trim()),
+           worry:gv('r-worry')},
+    grat:state.grat.filter(g=>g.to||g.what.trim()||g.why.trim()),
+    period:{score:state.period.score,
+            reasons:['pr-1','pr-2','pr-3'].map(gv).filter(Boolean)},
     resource:state.resource.slice(),
-    expect:gv('expect')
+    pct:{fun:gnum('pct-fun'),capFact:gnum('pct-capf'),capPlan:gnum('pct-capp')},
+    expect:{best:gv('expect-best'),fear:gv('expect-fear')}
   };
   d.subs.push(sub);store.save(d);
   const main=document.getElementById('view-form');
@@ -401,178 +562,238 @@ document.getElementById('submit').onclick=()=>{
   act.appendChild(dash);act.appendChild(dl);act.appendChild(again);
   s.appendChild(act);main.appendChild(s);
   window.scrollTo(0,0);
-};
-const gv=id=>document.getElementById(id).value.trim();
+}
 function download(obj,fname,type){
   const blob=obj instanceof Blob?obj:new Blob([JSON.stringify(obj,null,2)],{type:type||'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname;a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href),3000);
 }
 </script>
+
 <script>
-'use strict';
-/* ═══════════ СВОДКА (модератор) ═══════════ */
-function aggregate(){
-  const real=store.load().subs;
-  const demoMode=real.length<DEMO_MIN;
-  const subs=demoMode?DEMO_SUBS.concat(real):real;
-  const links={};
-  LINKS.forEach(l=>{
-    const comps=subs.map(s=>linkComposite(s.links[l.id])).filter(v=>v!=null);
-    links[l.id]={comps,mean:mean(comps),sd:std(comps)/10,n:comps.length, /* σ в шкале 1–10, как в методологии */
-      mentions:subs.filter(s=>s.hyp.link===l.id).length};
+/* ═══════════ ДАШБОРД ═══════════ */
+function aggregate(subs){
+  const perLink=LINKS.map(l=>{
+    const comps=Q.map(()=>[]);
+    subs.forEach(s=>{
+      const blk=s.links&&s.links[l.id];
+      if(!blk||blk.skipped)return;
+      (blk.scores||[]).forEach((v,qi)=>{if(v!=null)comps[qi].push(eff(v,qi));});
+    });
+    const vals=comps.map(c=>mean(c)==null?null:mean(c)*10);
+    const rated=vals.filter(v=>v!=null);
+    const m=rated.length?mean(rated):null;
+    const allEff=[];comps.forEach(c=>allEff.push(...c));
+    const st=statusOf(m);
+    return{id:l.id,name:l.name,comps,vals,mean:m,sigma:std(allEff)/10,status:st?st[0]:'—',tagCls:st?st[1]:'t-ok'};
   });
-  const ranked=LINKS.map(l=>({l,...links[l.id]})).filter(x=>x.mean!=null)
-    .sort((a,b)=>(100-b.mean)-(100-a.mean)); /* хуже всех — первым */
-  const res=[0,1,2,3].map(i=>mean(subs.map(s=>s.resource[i]).filter(v=>v!=null)));
-  const texts=k=>subs.map(s=>({v:(s.retro[k]||'').trim()})).filter(x=>x.v);
-  const grat=subs.flatMap(s=>s.grat||[]).filter(g=>g.to||g.what);
-  const expect=subs.map(s=>s.expect).filter(v=>v&&v.trim());
-  return {n:subs.length,nReal:real.length,demoMode,links,ranked,res,texts,grat,expect,
-    hyps:subs.map(s=>({link:s.hyp.link,text:s.hyp.text}))};
+  const ranked=perLink.filter(l=>l.mean!=null).sort((a,b)=>a.mean-b.mean);
+  const weak=ranked.length?ranked[0]:null;
+
+  const hyps=subs.filter(s=>s.hyp&&(s.hyp.link||s.hyp.text)).map(s=>{
+    const linkObj=LINKS.find(l=>l.id===s.hyp.link);
+    return{link:linkObj?linkObj.name:'—',type:s.hyp.type||null,direction:s.hyp.direction||null,text:s.hyp.text||''};
+  });
+  const typeTally={};hyps.forEach(h=>{if(h.type)typeTally[h.type]=(typeTally[h.type]||0)+1;});
+  const perScores=subs.map(s=>s.period&&s.period.score).filter(v=>v!=null);
+  const reasons=subs.map(s=>s.period&&s.period.reasons).filter(r=>r&&r.some(x=>x));
+  const retro={ach:[],mis:[],worry:[]};
+  subs.forEach(s=>{
+    if(!s.retro)return;
+    (s.retro.achievements||[]).forEach(a=>{if(a.what)retro.ach.push(a);});
+    (s.retro.mistakes||[]).forEach(m2=>{if(m2.what)retro.mis.push(m2);});
+    if(s.retro.worry)retro.worry.push(s.retro.worry);
+  });
+  const grats=[];subs.forEach(s=>{(s.grat||[]).forEach(g=>{if(g.to)grats.push(g);});});
+  const expects={best:[],fear:[]};
+  subs.forEach(s=>{if(!s.expect)return;if(s.expect.best)expects.best.push(s.expect.best);if(s.expect.fear)expects.fear.push(s.expect.fear);});
+  const resource=RESOURCE.map((label,ri)=>{
+    const vs=subs.map(s=>s.resource?s.resource[ri]:null).filter(v=>v!=null);
+    return{label,mean:vs.length?mean(vs)*10:null,n:vs.length};
+  });
+  const pcts=[['fun','% задач в удовольствие'],['capFact','% времени на стратегию — факт'],['capPlan','% времени на стратегию — готовы']]
+    .map(([k,label])=>{const vs=subs.map(s=>s.pct?s.pct[k]:null).filter(v=>v!=null);
+      return{label,mean:vs.length?vs.reduce((a,b)=>a+b,0)/vs.length:null,n:vs.length};});
+  return{n:subs.length,perLink,ranked,weak,hyps,typeTally,
+    perScoreMean:perScores.length?mean(perScores):null,reasons,retro,grats,expects,resource,pcts};
+}
+
+function barRow(label,val,extra){
+  const c=colorOf(val);
+  return '<div class="qrow" style="margin-bottom:8px">'+
+    '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">'+
+    '<span class="qlabel" style="margin:0">'+label+'</span>'+
+    '<span class="mono" style="font-size:11px;font-weight:800;color:'+c+'">'+fmt(val,0)+'</span></div>'+
+    '<div class="bar" style="margin-top:4px"><i style="width:'+(val==null?0:val.toFixed(0))+'%;background:'+c+'"></i></div>'+
+    (extra||'')+'</div>';
 }
 
 function renderDash(){
-  const A=aggregate();const body=document.getElementById('dash-body');body.innerHTML='';
-  if(A.demoMode){
-    const dm=el('div','panel');dm.style.borderColor='#fbbf2455';
-    dm.innerHTML='<h2 style="color:var(--amber)">Демо-режим</h2>'+
-      '<p class="lead mt8">Пока собрано реальных анкет: <b style="color:var(--amber)">'+A.nReal+'</b> — этого мало для статистики, поэтому ниже показаны демонстрационные данные компании-примера (9 участников)'+
-      (A.nReal?' <b>плюс ваши ответы</b> — они уже учтены в цифрах.':' — заполните анкету, и ваши ответы добавятся в цифры.')+
-      ' Как только наберётся '+DEMO_MIN+'+ реальные анкеты, демо-данные отключатся автоматически.</p>';
-    body.appendChild(dm);
-  }
-  /* Статистика */
-  const stats=el('div','panel');
-  stats.appendChild(el('h2',null,'Общая картина'));
-  const g=el('div','grid2 mt8');g.style.gridTemplateColumns='repeat(4,1fr)';g.style.display='grid';
-  const st=(v,l)=>{const s=el('div','stat');s.innerHTML=`<div class="v">${v}</div><div class="l">${l}</div>`;return s;};
-  g.appendChild(st(A.n,'анкет в сводке'+(A.demoMode?' (демо)':'')));
-  g.appendChild(st(A.grat.length,'благодарностей'));
-  const worst=A.ranked[0];
-  g.appendChild(st(worst?esc(worst.l.name):'—','главный кандидат в ограничения'));
-  g.appendChild(st(worst?fmt(worst.mean):'—','его балл из 100'));
-  stats.appendChild(g);body.appendChild(stats);
+  const host=document.getElementById('dash-body');
+  const realSubs=store.load().subs;
+  const demoOn=realSubs.length<DEMO_MIN;
+  const subs=demoOn?DEMO_SUBS:realSubs;
+  const a=aggregate(subs);
+  if(!a.n){host.innerHTML='<div class="panel"><p class="note">Пока нет ни одной анкеты.</p></div>';return;}
+  let h='';
+  if(demoOn)h+='<div class="panel" style="border-color:#fbbf2455;background:#fbbf240a">'+
+    '<p class="note" style="color:var(--amber);margin:0">⚠ ДЕМО-РЕЖИМ: показаны синтетические данные компании-примера. '+
+    'Дашборд станет живым после '+DEMO_MIN+' реальных анкет (сейчас '+realSubs.length+'). Демо-данные не попадают в выгрузку.</p></div>';
+
+  /* Сводная статистика */
+  h+='<div class="grid3" style="grid-template-columns:repeat(4,1fr)">';
+  h+='<div class="stat"><div class="v">'+a.n+'</div><div class="l">анкет</div></div>';
+  h+='<div class="stat"><div class="v">'+(a.perScoreMean!=null?fmt(a.perScoreMean,1):'—')+'</div><div class="l">оценка периода (ср.)</div></div>';
+  h+='<div class="stat"><div class="v" style="font-size:13px;line-height:1.6">'+(a.weak?esc(a.weak.name):'—')+'</div><div class="l">кандидат в ограничения</div></div>';
+  h+='<div class="stat"><div class="v">'+(a.weak?fmt(a.weak.mean,0):'—')+'</div><div class="l">его балл (0–100)</div></div>';
+  h+='</div>';
 
   /* Карта звеньев */
-  const ch=el('div','panel');
-  ch.appendChild(el('h2',null,'Звенья цепочки — сводные оценки'));
-  ch.appendChild(el('p','note','Балл 0–100: среднее по 6 вопросам (обратные перевёрнуты) × 10. * σ ≥ 2.5 — у участников нет единой картины по звену; требует дополнительного анализа и обсуждения.'));
-  A.ranked.forEach(x=>{
-    const stt=statusOf(x.mean);
-    const d=el('div','dcard');d.style.borderLeftColor=colorOf(x.mean);
-    const h=el('div','dhead');
-    h.innerHTML=`<div><span class="dname">${esc(x.l.name)}</span>
-      <span class="dmeta" style="margin-left:8px">n=${x.n}${x.sd>=2.5?' · σ '+x.sd.toFixed(1)+' ⚠':''} · в гипотезах: ${x.mentions}</span></div>
-      <div style="display:flex;gap:8px;align-items:center"><span class="tag ${stt[1]}">${stt[0]}</span>
-      <span class="big" style="color:${colorOf(x.mean)}">${fmt(x.mean)}</span></div>`;
-    d.appendChild(h);
-    const bar=el('div','bar mt8');bar.innerHTML=`<i style="width:${x.mean}%;background:${colorOf(x.mean)}"></i>`;
-    d.appendChild(bar);ch.appendChild(d);
+  h+='<div class="panel"><h2 style="margin-bottom:10px">Карта звеньев цепочки создания ценности (0–100)</h2>';
+  a.ranked.forEach(l=>{
+    h+='<div class="dcard" style="border-left-color:'+colorOf(l.mean)+'">'+
+      '<div class="dhead"><span class="dname">'+esc(l.name)+'</span>'+
+      '<span class="tag '+l.tagCls+'">'+l.status+'</span></div>'+
+      '<div style="display:flex;align-items:center;gap:10px;margin-top:8px">'+
+      '<div class="bar" style="flex:1"><i style="width:'+l.mean.toFixed(0)+'%;background:'+colorOf(l.mean)+'"></i></div>'+
+      '<span class="mono" style="font-size:12px;font-weight:800;color:'+colorOf(l.mean)+'">'+fmt(l.mean,0)+'</span></div>'+
+      '<div class="dmeta" style="margin-top:6px">'+(l.sigma>=2.5?'⚠ разброс мнений σ='+l.sigma.toFixed(1)+' — команда спорит':'σ='+l.sigma.toFixed(1))+'</div></div>';
   });
-  body.appendChild(ch);
+  h+='<p class="note">Сортировка от худшего. По TOC фокус сессии — одно звено-кандидат, а не «всё сразу». '+
+    '⚠ σ≥2,5 — покажите разброс на сессии: спор оценок — сам по себе данные.</p>';
+  const detail=a.ranked.find(l=>l.sigma>=2.5)||a.ranked[0];
+  if(detail){
+    h+='<h3 class="sub">Детализация: '+esc(detail.name)+'</h3>';
+    detail.vals.forEach((v,qi)=>{h+=barRow(esc(Q[qi]),v);});
+  }
+  h+='</div>';
 
-  /* Гипотезы об ограничении */
-  const hy=el('div','panel');
-  hy.appendChild(el('h2',null,'Гипотезы об узком месте (блок 01, анонимно)'));
-  A.hyps.forEach(h=>{
-    const ln=(LINKS.find(l=>l.id===h.link)||{}).name||'—';
-    hy.appendChild(el('div','textitem',`<b>${esc(ln)}:</b> ${esc(h.text)}`));
-  });
-  body.appendChild(hy);
+  /* Гипотезы */
+  h+='<div class="panel"><h2 style="margin-bottom:10px">Гипотезы об узком месте</h2>';
+  const tt=a.typeTally;
+  if(Object.keys(tt).length){
+    h+='<div class="chips">'+Object.keys(TYPES).filter(k=>tt[k]).map(k=>'<span class="chip on" style="cursor:default">'+esc(TYPES[k])+' · '+tt[k]+'</span>').join('')+'</div>';
+  }
+  if(a.hyps.length)a.hyps.forEach(x=>{
+    const tags=[x.link,x.type?TYPES[x.type]:null,x.direction].filter(Boolean)
+      .map(t=>'<span class="dmeta" style="border:1px solid var(--line);border-radius:3px;padding:1px 6px">'+esc(t)+'</span>').join(' ');
+    h+='<div class="textitem"><div style="margin-bottom:4px">'+tags+'</div>'+esc(x.text)+'</div>';
+  });else h+='<p class="note">Пока пусто.</p>';
+  h+='</div>';
 
-  /* Ресурс */
-  const rs=el('div','panel');
-  rs.appendChild(el('h2',null,'Настрой команды перед сессией (средние)'));
-  const rg=el('div','grid2 mt8');
-  RESOURCE.forEach((r,i)=>{
-    const v=A.res[i];
-    const s=el('div','stat');
-    s.innerHTML=`<div class="v" style="color:${v==null?'var(--faint)':colorOf(v*10)}">${fmt(v,1)}</div>
-      <div class="l">${esc(r)}</div>
-      <div class="bar mt8"><i style="width:${v?v*10:0}%;background:${colorOf(v?v*10:null)}"></i></div>`;
-    rg.appendChild(s);
-  });
-  rs.appendChild(rg);body.appendChild(rs);
+  /* Почему не 10 */
+  h+='<div class="panel"><h2 style="margin-bottom:10px">Почему не 10? Причины по оценке периода</h2>';
+  if(a.reasons.length)a.reasons.forEach(r=>{
+    h+='<div class="textitem">'+r.filter(Boolean).map(x=>'• '+esc(x)).join('<br>')+'</div>';
+  });else h+='<p class="note">Пока пусто.</p>';
+  h+='</div>';
+
+  /* Настрой + проценты */
+  h+='<div class="panel"><h2 style="margin-bottom:10px">Настрой команды перед сессией</h2>';
+  a.resource.forEach(r=>{if(r.n)h+=barRow(esc(r.label),r.mean);});
+  h+='<div class="grid3" style="margin-top:12px">';
+  a.pcts.forEach(p=>{h+='<div class="stat"><div class="v">'+(p.mean!=null?p.mean.toFixed(0)+'%':'—')+'</div><div class="l">'+esc(p.label)+'</div></div>';});
+  h+='</div></div>';
 
   /* Ретроспектива */
-  const rt=el('div','panel');
-  rt.appendChild(el('h2',null,'Ретроспектива (анонимно)'));
-  [['good','Что получилось'],['bad','Что не получилось'],['learned','Чему научились'],['worry','Что беспокоит']].forEach(([k,label])=>{
-    const arr=A.texts(k);if(!arr.length)return;
-    rt.appendChild(el('h3','mono mt16',label)).style.cssText='font-size:11px;color:var(--cyan);margin:14px 0 6px;letter-spacing:.08em';
-    arr.forEach(t=>rt.appendChild(el('div','textitem',esc(t.v))));
-  });
-  body.appendChild(rt);
+  h+='<div class="panel"><h2 style="margin-bottom:10px">Ретроспектива периода</h2>';
+  h+='<h3 class="sub">Достижения и прорывы</h3>';
+  if(a.retro.ach.length)a.retro.ach.forEach(x=>{
+    h+='<div class="textitem warn"><b>'+esc(x.what)+'</b>'+(x.result?'<br>'+esc(x.result):'')+'</div>';
+  });else h+='<p class="note">Пока пусто.</p>';
+  h+='<h3 class="sub">Ошибки и уроки</h3>';
+  if(a.retro.mis.length)a.retro.mis.forEach(x=>{
+    h+='<div class="textitem"><b>'+esc(x.what)+'</b>'+(x.lesson?'<br>Вывод: '+esc(x.lesson):'')+'</div>';
+  });else h+='<p class="note">Пока пусто.</p>';
+  h+='<h3 class="sub">Что беспокоит</h3>';
+  if(a.retro.worry.length)a.retro.worry.forEach(x=>{h+='<div class="textitem fear">'+esc(x)+'</div>';});
+  else h+='<p class="note">Пока пусто.</p>';
+  h+='</div>';
 
-  /* Благодарности — ТОЛЬКО МОДЕРАТОРУ */
-  if(A.grat.length){
-    const gr=el('div','panel');gr.style.borderColor='#34d39944';
-    gr.appendChild(el('h2',null,'Благодарности <span class="tag t-ok" style="vertical-align:2px">ТОЛЬКО МОДЕРАТОРУ</span>'));
-    gr.appendChild(el('p','note','Поимённые благодарности. Группе не показываем — во избежание конфликтов и обид.'));
-    A.grat.forEach(g2=>gr.appendChild(el('div','textitem warn',`<b>${esc(g2.to||'—')}:</b> ${esc(g2.what||'')}`)));
-    body.appendChild(gr);
-  }
+  /* Благодарности */
+  h+='<div class="panel"><h2 style="margin-bottom:10px">Благодарности <span class="dmeta">только для модератора</span></h2>';
+  if(a.grats.length)a.grats.forEach(g=>{
+    h+='<div class="textitem warn"><i>'+esc(g.to)+'</i> — '+esc(g.what||'')+(g.why?'<br>Условие успеха: '+esc(g.why):'')+'</div>';
+  });else h+='<p class="note">Пока пусто.</p>';
+  h+='</div>';
 
-  /* Ожидания */
-  if(A.expect.length){
-    const ex=el('div','panel');
-    ex.appendChild(el('h2',null,'Ожидания от сессии (анонимно)'));
-    A.expect.forEach(t=>ex.appendChild(el('div','textitem',esc(t))));
-    body.appendChild(ex);
-  }
+  /* Ожидания и страхи */
+  h+='<div class="panel"><h2 style="margin-bottom:10px">Ожидания от сессии</h2>';
+  h+='<h3 class="sub">Лучший результат</h3>';
+  if(a.expects.best.length)a.expects.best.forEach(x=>{h+='<div class="textitem warn">'+esc(x)+'</div>';});
+  else h+='<p class="note">Пока пусто.</p>';
+  h+='<h3 class="sub">Главные страхи</h3>';
+  if(a.expects.fear.length)a.expects.fear.forEach(x=>{h+='<div class="textitem fear">'+esc(x)+'</div>';});
+  else h+='<p class="note">Пока пусто.</p>';
+  h+='</div>';
+
+  h+='<p class="note">Все ответы анонимны; данные лежат в браузере участника и у модератора. '+
+    (demoOn?'Выгрузка содержит только реальные анкеты — сейчас их '+realSubs.length+'.':'')+'</p>';
+  host.innerHTML=h;
 }
 
-/* ═══════════ ЭКСПОРТ / ИМПОРТ ═══════════ */
+/* ── Экспорт / импорт / очистка ── */
 document.getElementById('exp-json').onclick=()=>{
-  const d=store.load();
-  download({meta:{tool:'stratsessiya-test',v:1,exported:new Date().toISOString()},subs:d.subs},
-    'strat-svodka-'+new Date().toISOString().slice(0,10)+'.json');
+  const payload={meta:{app:'stratsessiya-test',version:'1.3',exportedAt:new Date().toISOString(),
+    links:LINKS,questions:Q,scale:'1..10',reverseIndices:REV,
+    normalization:'mean(effective scores)*10',thresholds:{constraint:45,watch:65},sigmaFlag:2.5,
+    types:TYPES,directions:DIRS,resource:RESOURCE},
+    submissions:store.load().subs};
+  download(payload,'stratsessiya-export-'+new Date().toISOString().slice(0,10)+'.json','application/json');
 };
 document.getElementById('exp-csv').onclick=()=>{
   const subs=store.load().subs;
-  const rows=[['id_анкеты','дата','звено','балл_звена_0_100','пропуск',...Q.map((q,i)=>'в'+(i+1)+(REV.includes(i)?'_обратный':''))]];
+  const rows=[['id','ts','link','link_name','q1','q2','q3','q4','q5','q6','composite_0_100']];
   subs.forEach(s=>LINKS.forEach(l=>{
-    const a=s.links[l.id];
-    rows.push([s.id,s.ts,l.name,a?(linkComposite(a)!=null?linkComposite(a).toFixed(0):''):'',a&&a.skipped?'да':'',
-      ...(a?a.scores.map(v=>v==null?'':v):['','','','','',''])]);
+    const blk=s.links&&s.links[l.id];
+    if(!blk||blk.skipped)return;
+    const sc=blk.scores||[];
+    rows.push([s.id,s.ts,l.id,l.name,...Q.map((_,qi)=>sc[qi]==null?'':sc[qi]),fmt(linkComposite(blk),1)]);
   }));
-  const csv='﻿'+rows.map(r=>r.map(c=>String(c).replace(/;/g,',')).join(';')).join('\r\n');
-  download(new Blob([csv],{type:'text/csv;charset=utf-8'}),'strat-otsenki-'+new Date().toISOString().slice(0,10)+'.csv');
+  const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(';')).join('\r\n');
+  download(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}),'stratsessiya-'+new Date().toISOString().slice(0,10)+'.csv');
 };
-const impFile=document.getElementById('imp-file');
-document.getElementById('imp-btn').onclick=()=>impFile.click();
-impFile.onchange=async()=>{
-  const d=store.load();let added=0;
-  for(const f of impFile.files){
-    try{
-      const j=JSON.parse(await f.text());
-      const arr=j.subs?j.subs:(j.id?[j]:[]); // полный экспорт ИЛИ одиночная анкета
-      arr.forEach(s=>{if(s&&s.id&&!d.subs.some(x=>x.id===s.id)){d.subs.push(s);added++;}});
-    }catch(e){}
-  }
-  store.save(d);impFile.value='';
-  document.getElementById('imp-status').textContent=
-    added?('Импортировано анкет: '+added+'. Всего в сводке: '+d.subs.length+'.'):'Новых анкет не найдено (возможно, эти файлы уже импортированы).';
-  renderDash();
-};
+document.getElementById('imp-btn').onclick=()=>document.getElementById('imp-file').click();
+document.getElementById('imp-file').addEventListener('change',e=>{
+  const files=[...e.target.files];if(!files.length)return;
+  const cur=store.load();const ids=new Set(cur.subs.map(s=>s.id));
+  let added=0,done=0;
+  files.forEach(f=>{
+    const rd=new FileReader();
+    rd.onload=()=>{
+      try{
+        const data=JSON.parse(rd.result);
+        const subs=Array.isArray(data)?data:(data.submissions||data.subs||[data]);
+        subs.forEach(s=>{if(s&&s.id&&s.links&&!ids.has(s.id)){cur.subs.push(s);ids.add(s.id);added++;}});
+      }catch(err){alert('Не удалось импортировать '+f.name+': '+err.message);}
+      if(++done===files.length){
+        store.save(cur);
+        document.getElementById('imp-status').textContent='Импортировано анкет: '+added+' (всего '+cur.subs.length+')';
+        renderDash();
+      }
+    };
+    rd.readAsText(f);
+  });
+  e.target.value='';
+});
 document.getElementById('clear').onclick=()=>{
-  if(confirm('Удалить ВСЕ собранные анкеты с этого устройства? Действие необратимо. Перед очисткой рекомендую экспортировать JSON.')){
-    localStorage.removeItem(LS_KEY);renderDash();
-    document.getElementById('imp-status').textContent='Все данные удалены.';
-  }
+  if(!confirm('Удалить ВСЕ анкеты из этого браузера?'))return;
+  localStorage.removeItem(LS_KEY);renderDash();
+  document.getElementById('imp-status').textContent='Данные очищены.';
 };
 
-/* ═══════════ РОУТЕР ═══════════ */
-function route(){
-  const dash=location.hash==='#/svodka';
+/* ── Роутер ── */
+function router(){
+  const dash=(location.hash||'#/').indexOf('#/svodka')===0;
   document.getElementById('view-form').hidden=dash;
   document.getElementById('view-dash').hidden=!dash;
   document.getElementById('nav-form').classList.toggle('on',!dash);
   document.getElementById('nav-dash').classList.toggle('on',dash);
-  if(dash)renderDash();
+  if(dash)renderDash();else showStep(curStep);
 }
-window.addEventListener('hashchange',route);route();
+window.addEventListener('hashchange',router);
+document.querySelectorAll('.brand').forEach(b=>{b.style.cursor='pointer';b.addEventListener('click',()=>{location.hash='#/';});});
+router();
 </script>
 </body>
 </html>
