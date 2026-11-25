@@ -105,14 +105,32 @@ textarea:focus,select:focus,input[type=number]:focus{outline:none;border-color:v
 .rowitem textarea+textarea,.rowitem select+textarea{margin-top:6px;}
 .rm{position:absolute;top:4px;right:8px;background:none;border:none;color:var(--faint);cursor:pointer;font-size:13px;padding:4px;}
 .rm:hover{color:var(--red);}
+/* кураторская форма «Состояние отдела» */
+.mrow{background:var(--panel2);border:1px solid var(--line-soft);border-radius:6px;padding:10px;margin-bottom:8px;position:relative;}
+.mrow .rm{top:2px;}
+input[type=text]{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:4px;
+  color:var(--ink);padding:9px 11px;font-size:13px;font-family:inherit;}
+input[type=text]:focus{outline:none;border-color:var(--cyan);}
+.mgap>*,.mrow>*{margin-bottom:6px;}
+.mrow>*:last-child{margin-bottom:0;}
+.gapcalc{display:flex;gap:10px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:11px;
+  color:var(--dim);background:var(--panel);border:1px dashed var(--line);border-radius:4px;padding:6px 10px;margin:2px 0 6px;}
+.gapcalc b{font-weight:800;}
+.fixedq{font-size:12px;font-weight:600;line-height:1.4;margin-bottom:6px;color:var(--ink);}
+.formcard{display:flex;justify-content:space-between;align-items:center;gap:8px;
+  background:var(--panel2);border:1px solid var(--line-soft);border-radius:6px;padding:10px 12px;margin-bottom:8px;}
+.formcard .dname{font-size:13px;font-weight:600;}
+.formcard .acts{display:flex;gap:6px;flex-shrink:0;}
+.formcard .acts .btn{padding:6px 10px;font-size:9px;}
 </style>
 </head>
 <body>
 <header>
   <div class="hwrap">
-    <div class="brand">СТРАТСЕССИЯ<small>тестовый сбор данных · v1.3</small></div>
+    <div class="brand">СТРАТСЕССИЯ<small>тестовый сбор данных · v1.4</small></div>
     <nav class="nav">
       <a href="#/" id="nav-form">АНКЕТА</a>
+      <a href="#/curator" id="nav-cur">ОТДЕЛ</a>
       <a href="#/svodka" id="nav-dash">ДАШБОРД</a>
     </nav>
   </div>
@@ -251,6 +269,79 @@ textarea:focus,select:focus,input[type=number]:focus{outline:none;border-color:v
   <div class="faint mt8 center" id="nav-hint">Чтобы идти дальше, ответьте на блок 01 — про узкое место</div>
   <div class="center mt16"><a class="btn btn-o" href="#/svodka" style="display:inline-block;text-decoration:none">СНАЧАЛА ПОСМОТРЕТЬ ДЕМО-ДАШБОРД →</a></div>
   <div class="faint mt16 center">Тестовая версия: ответы сохраняются только на этом устройстве</div>
+</main>
+
+<!-- ══════════ КУРАТОРСКАЯ ФОРМА «СОСТОЯНИЕ ОТДЕЛА» (лист 4 Excel 4.0) ══════════ -->
+<main id="view-curator" hidden>
+  <div class="panel">
+    <h1>Состояние отдела</h1>
+    <p class="lead">Заполняется куратором и командой отдела <b style="color:var(--mint)">до стратсессии</b>.
+      На самой сессии время не тратим на сбор фактов — сразу сверяем разрывы «план–факт», обсуждаем версии причин
+      и выбираем решение. Чем конкретнее цифры, тем меньше субъективности в зале.</p>
+  </div>
+
+  <div class="panel">
+    <h2><span class="secnum">00</span>Кто заполняет</h2>
+    <div class="grid2">
+      <div><div class="qlabel">Отдел *</div><input type="text" id="cur-dept" list="dept-list" placeholder="Название отдела">
+        <datalist id="dept-list"></datalist></div>
+      <div><div class="qlabel">Куратор (ФИО) *</div><input type="text" id="cur-person" placeholder="ФИО куратора отдела"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2><span class="secnum">01</span>Внешний контур: рынок, клиенты и продукт</h2>
+    <p class="note">Три вопроса для анализа. Факты — что реально наблюдаете; второе поле — что из этого вынести на обсуждение сессии.</p>
+    <div id="ext-list"></div>
+  </div>
+
+  <div class="panel">
+    <h2><span class="secnum">02</span>План–факт по ключевым метрикам отдела</h2>
+    <p class="note">Только числа в полях «План» и «Факт». Разрыв и % выполнения считаются автоматически.
+      Учтите: для метрик «меньше = лучше» (затраты, брак, сроки) положительный разрыв — это плохо, интерпретируйте наоборот.</p>
+    <div id="met-list"></div>
+    <button class="btn btn-o" id="met-add" type="button">+ ДОБАВИТЬ МЕТРИКУ</button>
+  </div>
+
+  <div class="panel">
+    <h2><span class="secnum">03</span>Проблемы до сессии: причины и варианты решений</h2>
+    <p class="note">Стандарт формулировки проблемы (обязателен): наблюдаемый <b>факт + измерение + период</b>.
+      Эталон: «Брак 15% на входе при обещанном сроке 3 дня, второй квартал подряд». Два варианта решения —
+      быстрый (эксплуатация/подчинение, до 2 недель, без бюджета) и ресурсный (расширение, 3–6 месяцев).</p>
+    <div id="prob-list"></div>
+    <button class="btn btn-o" id="prob-add" type="button">+ ДОБАВИТЬ ПРОБЛЕМУ</button>
+  </div>
+
+  <div class="panel">
+    <h2><span class="secnum">04</span>Точки роста и инициативы на следующий период</h2>
+    <div id="grow-list"></div>
+    <button class="btn btn-o" id="grow-add" type="button">+ ДОБАВИТЬ ИНИЦИАТИВУ</button>
+  </div>
+
+  <div class="panel">
+    <h2><span class="secnum">05</span>Кросс-функциональный контур и правила-ограничения</h2>
+    <p class="note">Отвечайте фактами, не мнениями. Особенно вопрос 1 — обязательно с цифрой.</p>
+    <div id="cross-list"></div>
+  </div>
+
+  <div class="panel">
+    <button class="btn btn-p" id="cur-save" type="button">СОХРАНИТЬ ФОРМУ ОТДЕЛА</button>
+    <div class="faint mt8" id="cur-status"></div>
+  </div>
+
+  <div class="panel">
+    <h2 style="margin-bottom:10px">Сохранённые формы отделов</h2>
+    <div id="cur-forms"></div>
+    <div class="actions" style="margin-top:10px">
+      <button class="btn btn-o" id="cur-exp" type="button">ЭКСПОРТ ВСЕХ (JSON)</button>
+      <button class="btn btn-o" id="cur-imp-btn" type="button">ИМПОРТ</button>
+      <button class="btn btn-o" id="cur-clear" type="button" style="border-color:#f8717155;color:var(--red)">ОЧИСТИТЬ</button>
+      <input type="file" id="cur-imp-file" accept=".json,application/json" multiple hidden>
+    </div>
+    <div class="faint mt8" id="cur-imp-status"></div>
+    <div class="faint mt8">Формы лежат в этом браузере. Чтобы передать модератору — скачайте файл формы кнопкой
+      «Файл» и отправьте; модератор импортирует его к себе. Данные кураторских форм не смешиваются с анкетами участников.</div>
+  </div>
 </main>
 
 <!-- ══════════ ДАШБОРД (модератор) ══════════ -->
@@ -571,6 +662,285 @@ function download(obj,fname,type){
 </script>
 
 <script>
+'use strict';
+/* ═══════════ КУРАТОРСКАЯ ФОРМА «СОСТОЯНИЕ ОТДЕЛА» (лист 4 Excel 4.0) ═══════════ */
+const CUR_LS='strat_curator_v1';
+const EXT_Q=[
+  'Как изменились поведение, запросы или критерии выбора у клиентов?',
+  'Что конкуренты делают сильнее нас, а в чём наше ключевое преимущество?',
+  'Где мы теряем сделки/клиентов или недозарабатываем в воронке/продукте?'
+];
+const CROSS_Q=[
+  'Что смежные отделы делают (или не делают), из-за чего страдают ваши ключевые метрики? (факт + цифра, напр.: «брак 15% на входе при обещанном сроке 3 дня»)',
+  'Какие из ваших планируемых инициатив (блок 04 выше) могут ухудшить работу других отделов или создать им новое ограничение?',
+  'Какие внутренние правила, регламенты, KPI или договорённости мешают вашему отделу сильнее, чем нехватка ресурсов? (ограничения-правила по ТОС)',
+  'Ваша главная метрика (блок 02): как она влияет на систему в целом — на скорость генерации денег компанией (проход), на запасы/зависшие деньги или на операционные затраты? Если метрика улучшает отдел, но не систему — так и напишите.'
+];
+const TRENDS=['↓ падает','→ стабильно','↑ растёт'];
+const GAP_STATUS=['Закрывается внутри отдела','Нужны смежники','Нужно решение на СС'];
+const IMPACT_LEVEL=['Локально (по отделу)','На смежные звенья','На всю систему'];
+
+const curStore={
+  load(){try{return JSON.parse(localStorage.getItem(CUR_LS))||{forms:[]}}catch(e){return{forms:[]}}},
+  save(d){localStorage.setItem(CUR_LS,JSON.stringify(d))}
+};
+const cur={editingId:null,dept:'',person:'',
+  ext:EXT_Q.map(()=>({facts:'',risk:''})),
+  metrics:[],problems:[],growth:[],
+  cross:CROSS_Q.map(()=>({answer:''}))};
+
+/* даталист отделов из звеньев анкеты */
+document.getElementById('dept-list').innerHTML=LINKS.map(l=>'<option value="'+esc(l.name)+'">').join('');
+const curDept=document.getElementById('cur-dept'),curPerson=document.getElementById('cur-person');
+curDept.addEventListener('input',()=>cur.dept=curDept.value);
+curPerson.addEventListener('input',()=>cur.person=curPerson.value);
+
+/* универсальный рендер поля внутри mrow */
+function curField(item,f){
+  let inp;
+  if(f.type==='select'){
+    inp=document.createElement('select');
+    inp.innerHTML='<option value="">'+esc(f.ph)+'</option>'+f.options.map(o=>'<option>'+esc(o)+'</option>').join('');
+    inp.value=item[f.k]||'';inp.onchange=()=>{item[f.k]=inp.value;};
+  }else if(f.type==='number'){
+    inp=document.createElement('input');inp.type='number';inp.step='any';inp.placeholder=f.ph;
+    inp.value=item[f.k]==null?'':item[f.k];inp.oninput=()=>{item[f.k]=inp.value===''?null:+inp.value;if(f.onnum)f.onnum();};
+  }else{
+    inp=document.createElement('textarea');inp.rows=f.rows||1;inp.placeholder=f.ph||'';
+    inp.value=item[f.k]||'';inp.addEventListener('input',()=>item[f.k]=inp.value);
+  }
+  return inp;
+}
+function curRow(listEl,arr,fields,onRemove){
+  const item={};fields.forEach(f=>item[f.k]=f.type==='select'?'':'');
+  arr.push(item);
+  const row=el('div','mrow');
+  const rm=el('button','rm','✕');rm.type='button';rm.title='Удалить';
+  rm.onclick=()=>{const i=arr.indexOf(item);if(i>-1)arr.splice(i,1);row.remove();if(onRemove)onRemove();};
+  row.appendChild(rm);
+  fields.forEach(f=>row.appendChild(curField(item,f)));
+  listEl.appendChild(row);
+  return{item,row};
+}
+
+/* Блок 01: внешний контур — фиксированные вопросы */
+const extList=document.getElementById('ext-list');
+EXT_Q.forEach((q,i)=>{
+  const row=el('div','mrow');
+  row.appendChild(el('div','fixedq',esc(q)));
+  const f1=curField(cur.ext[i],{k:'facts',ph:'Факты и наблюдения отдела',rows:2});
+  const f2=curField(cur.ext[i],{k:'risk',ph:'Риск / возможность для обсуждения на СС',rows:1});
+  row.appendChild(f1);row.appendChild(f2);
+  extList.appendChild(row);
+});
+
+/* Блок 02: метрики с авторасчётом разрыва */
+const metList=document.getElementById('met-list'),metAdd=document.getElementById('met-add');
+function metRecalc(item,row){
+  const p=item.plan,f=item.fact;
+  const gap=(p!=null&&f!=null)?f-p:null;
+  const pct=(p!=null&&f!=null&&p!==0)?f/p*100:(p===0&&f!=null&&f===0?100:null);
+  const gEl=row.querySelector('.gapcalc');
+  const gc=v=>v==null?'—':(v>0?'var(--red)':v<0?'var(--mint)':'var(--dim)');
+  gEl.innerHTML='Разрыв (Факт − План): <b style="color:'+gc(gap)+'">'+(gap==null?'—':(gap>0?'+':'')+gap)+'</b>'+
+    '&nbsp;&nbsp;·&nbsp;&nbsp;% плана: <b style="color:'+gc(gap==null?null:-gap)+'">'+(pct==null?'—':pct.toFixed(0)+'%')+'</b>';
+}
+function addMetric(prefill){
+  if(cur.metrics.length>=5){metAdd.disabled=true;return;}
+  const {item,row}=curRow(metList,cur.metrics,[
+    {k:'name',ph:'Метрика (ед. изм.), напр.: «Отгрузка, шт/мес»',rows:1},
+    {k:'plan',type:'number',ph:'План / Цель'},
+    {k:'fact',type:'number',ph:'Факт'},
+    {k:'trend',type:'select',ph:'Тренд за 6 мес…',options:TRENDS},
+    {k:'status',type:'select',ph:'Статус разрыва…',options:GAP_STATUS},
+    {k:'hypothesis',ph:'Гипотеза причины разрыва (версия отдела)',rows:1},
+    {k:'question',ph:'Вопрос / развилка для СС',rows:1}
+  ],()=>{metAdd.disabled=cur.metrics.length>=5;});
+  /* поля план/факт в одну строку + блок авторасчёта */
+  const g=el('div','gapcalc','Разрыв (Факт − План): <b>—</b>&nbsp;&nbsp;·&nbsp;&nbsp;% плана: <b>—</b>');
+  const nameInp=row.children[1],planInp=row.children[2],factInp=row.children[3];
+  const wrap=el('div');wrap.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:6px;';
+  wrap.appendChild(planInp);wrap.appendChild(factInp);
+  row.insertBefore(g,row.children[2]?row.children[2]:null);
+  row.insertBefore(wrap,g);
+  nameInp.style.width='calc(100% - 24px)';
+  const rec=()=>metRecalc(item,row);
+  planInp.oninput=()=>{item.plan=planInp.value===''?null:+planInp.value;rec();};
+  factInp.oninput=()=>{item.fact=factInp.value===''?null:+factInp.value;rec();};
+  if(prefill){Object.assign(item,prefill);
+    nameInp.value=item.name||'';planInp.value=item.plan==null?'':item.plan;factInp.value=item.fact==null?'':item.fact;
+    [...row.querySelectorAll('select')].forEach((s,si)=>{s.value=(si===0?item.trend:item.status)||'';});
+    row.querySelectorAll('textarea').forEach((t,ti)=>{t.value=ti===0?(item.hypothesis||''):(item.question||'');});
+    rec();}
+}
+metAdd.onclick=()=>{addMetric();metAdd.disabled=cur.metrics.length>=5;};
+
+/* Блок 03: проблемы */
+const probList=document.getElementById('prob-list'),probAdd=document.getElementById('prob-add');
+function addProblem(prefill){
+  if(cur.problems.length>=5){probAdd.disabled=true;return;}
+  const {item,row}=curRow(probList,cur.problems,[
+    {k:'desc',ph:'Проблема и цена влияния (₽, % или часы). Стандарт: ФАКТ + измерение + период. Эталон: «Брак 15% на входе при обещанном сроке 3 дня, второй квартал подряд»',rows:2},
+    {k:'level',type:'select',ph:'Уровень влияния…',options:IMPACT_LEVEL},
+    {k:'causes',ph:'Прогноз причин (версия отдела)',rows:1},
+    {k:'adjacent',ph:'Возможные смежные причины и риски',rows:1},
+    {k:'sol1',ph:'Вариант решения 1 — эксплуатация/подчинение: без бюджета, до 2 недель',rows:2},
+    {k:'sol2',ph:'Вариант решения 2 — расширение: ресурсный проект, 3–6 месяцев',rows:2},
+    {k:'compare',ph:'Сравнение вариантов',rows:1}
+  ],()=>{probAdd.disabled=cur.problems.length>=5;});
+  row.querySelector('textarea').style.width='calc(100% - 24px)';
+  if(prefill){Object.assign(item,prefill);
+    const tas=[item.desc,item.causes,item.adjacent,item.sol1,item.sol2,item.compare];
+    row.querySelectorAll('textarea').forEach((t,ti)=>t.value=tas[ti]||'');
+    row.querySelector('select').value=item.level||'';}
+}
+probAdd.onclick=()=>{addProblem();probAdd.disabled=cur.problems.length>=5;};
+
+/* Блок 04: инициативы */
+const growList=document.getElementById('grow-list'),growAdd=document.getElementById('grow-add');
+function addGrowth(prefill){
+  if(cur.growth.length>=5){growAdd.disabled=true;return;}
+  const {item,row}=curRow(growList,cur.growth,[
+    {k:'initiative',ph:'Инициатива / точка роста',rows:1},
+    {k:'effect',ph:'Ожидаемый эффект на метрику (₽ / % / время)',rows:1},
+    {k:'resources',ph:'Необходимые ресурсы и риски',rows:1},
+    {k:'decision',ph:'Какое решение нужно принять на СС',rows:1},
+    {k:'direction',type:'select',ph:'Стратегическое направление…',options:DIRS.concat(['Другое'])},
+    {k:'barriers',ph:'Барьеры и запрос к компании (что помешает? что нужно от ГД/собственника/смежников?)',rows:2}
+  ],()=>{growAdd.disabled=cur.growth.length>=5;});
+  row.querySelector('textarea').style.width='calc(100% - 24px)';
+  if(prefill){Object.assign(item,prefill);
+    const tas=[item.initiative,item.effect,item.resources,item.decision,item.barriers];
+    row.querySelectorAll('textarea').forEach((t,ti)=>t.value=tas[ti]||'');
+    row.querySelector('select').value=item.direction||'';}
+}
+growAdd.onclick=()=>{addGrowth();growAdd.disabled=cur.growth.length>=5;};
+
+/* Блок 05: кросс-функциональный контур — фиксированные вопросы */
+const crossList=document.getElementById('cross-list');
+CROSS_Q.forEach((q,i)=>{
+  const row=el('div','mrow');
+  row.appendChild(el('div','fixedq',esc(q)));
+  row.appendChild(curField(cur.cross[i],{k:'answer',ph:'Факты и ответ отдела',rows:2}));
+  crossList.appendChild(row);
+});
+
+/* Сохранение */
+function curCollect(){
+  return{
+    id:cur.editingId||('c'+Date.now().toString(36)+Math.random().toString(36).slice(2,5)),
+    ts:new Date().toISOString(),
+    dept:cur.dept.trim(),curator:cur.person.trim(),
+    ext:cur.ext.map(e=>({facts:e.facts.trim(),risk:e.risk.trim()})),
+    metrics:cur.metrics.filter(m=>m.name.trim()||m.plan!=null||m.fact!=null)
+      .map(m=>({name:m.name.trim(),plan:m.plan,fact:m.fact,trend:m.trend||'',status:m.status||'',hypothesis:(m.hypothesis||'').trim(),question:(m.question||'').trim()})),
+    problems:cur.problems.filter(p=>p.desc.trim())
+      .map(p=>({desc:p.desc.trim(),level:p.level||'',causes:(p.causes||'').trim(),adjacent:(p.adjacent||'').trim(),sol1:(p.sol1||'').trim(),sol2:(p.sol2||'').trim(),compare:(p.compare||'').trim()})),
+    growth:cur.growth.filter(g=>g.initiative.trim())
+      .map(g=>({initiative:g.initiative.trim(),effect:(g.effect||'').trim(),resources:(g.resources||'').trim(),decision:(g.decision||'').trim(),direction:g.direction||'',barriers:(g.barriers||'').trim()})),
+    cross:cur.cross.map(c=>({answer:(c.answer||'').trim()}))
+  };
+}
+document.getElementById('cur-save').onclick=()=>{
+  const st=document.getElementById('cur-status');
+  if(!cur.dept.trim()||!cur.person.trim()){st.textContent='Заполните обязательные поля: отдел и куратор.';st.style.color='var(--red)';return;}
+  const form=curCollect();
+  const d=curStore.load();
+  const i=d.forms.findIndex(f=>f.id===form.id);
+  if(i>-1){d.forms[i]=form;st.textContent='Форма «'+form.dept+'» обновлена ('+new Date(form.ts).toLocaleString('ru-RU')+').';}
+  else{d.forms.push(form);st.textContent='Форма «'+form.dept+'» сохранена. Не забудьте передать файл модератору кнопкой «Файл» ниже.';}
+  cur.editingId=form.id;
+  curStore.save(d);st.style.color='var(--mint)';
+  renderCurForms();
+};
+
+/* Список сохранённых форм */
+function renderCurForms(){
+  const host=document.getElementById('cur-forms');
+  const d=curStore.load();
+  if(!d.forms.length){host.innerHTML='<p class="note">Пока нет сохранённых форм.</p>';return;}
+  host.innerHTML='';
+  d.forms.slice().reverse().forEach(f=>{
+    const card=el('div','formcard');
+    const info=el('div');
+    info.innerHTML='<div class="dname">'+esc(f.dept)+' — '+esc(f.curator)+'</div>'+
+      '<div class="dmeta">'+new Date(f.ts).toLocaleString('ru-RU')+' · '+f.metrics.length+' метрик · '+f.problems.length+' проблем · '+f.growth.length+' инициатив</div>';
+    const acts=el('div','acts');
+    const bLoad=el('button','btn btn-o','В ФОРМУ');bLoad.onclick=()=>curLoadForm(f.id);
+    const bFile=el('button','btn btn-o','ФАЙЛ');bFile.onclick=()=>download({meta:{app:'stratsessiya-curator',version:'1',form:'Состояние отдела'},form:f},'strat-otdel-'+f.dept.replace(/\s+/g,'_')+'-'+f.id+'.json','application/json');
+    const bDel=el('button','btn btn-o','УД.');bDel.style.borderColor='#f8717155';bDel.style.color='var(--red)';
+    bDel.onclick=()=>{if(!confirm('Удалить форму «'+f.dept+'»?'))return;const dd=curStore.load();dd.forms=dd.forms.filter(x=>x.id!==f.id);curStore.save(dd);renderCurForms();};
+    acts.appendChild(bLoad);acts.appendChild(bFile);acts.appendChild(bDel);
+    card.appendChild(info);card.appendChild(acts);
+    host.appendChild(card);
+  });
+}
+function curLoadForm(id){
+  const f=curStore.load().forms.find(x=>x.id===id);if(!f)return;
+  cur.editingId=f.id;cur.dept=f.dept;cur.person=f.curator;
+  curDept.value=f.dept;curPerson.value=f.curator;
+  /* внешний контур */
+  (f.ext||[]).forEach((e,i)=>{if(cur.ext[i]){cur.ext[i].facts=e.facts||'';cur.ext[i].risk=e.risk||'';}});
+  extList.querySelectorAll('.mrow').forEach((r,i)=>{const tas=r.querySelectorAll('textarea');if(tas[0])tas[0].value=cur.ext[i].facts;if(tas[1])tas[1].value=cur.ext[i].risk;});
+  /* динамические блоки */
+  metList.innerHTML='';cur.metrics.length=0;metAdd.disabled=false;
+  (f.metrics||[]).forEach(m=>addMetric(m));
+  metAdd.disabled=cur.metrics.length>=5;
+  probList.innerHTML='';cur.problems.length=0;probAdd.disabled=false;
+  (f.problems||[]).forEach(p=>addProblem(p));
+  probAdd.disabled=cur.problems.length>=5;
+  growList.innerHTML='';cur.growth.length=0;growAdd.disabled=false;
+  (f.growth||[]).forEach(g=>addGrowth(g));
+  growAdd.disabled=cur.growth.length>=5;
+  /* кросс-контур */
+  (f.cross||[]).forEach((c,i)=>{if(cur.cross[i]){cur.cross[i].answer=c.answer||'';}});
+  crossList.querySelectorAll('.mrow').forEach((r,i)=>{const t=r.querySelector('textarea');if(t)t.value=cur.cross[i].answer;});
+  document.getElementById('cur-status').textContent='Загружена форма «'+f.dept+'» — редактируйте и сохраните.';
+  window.scrollTo(0,0);
+}
+
+/* Экспорт / импорт / очистка */
+document.getElementById('cur-exp').onclick=()=>{
+  const d=curStore.load();
+  download({meta:{app:'stratsessiya-curator',version:'1',form:'Состояние отдела',exportedAt:new Date().toISOString()},forms:d.forms},
+    'stratsessiya-otdely-'+new Date().toISOString().slice(0,10)+'.json','application/json');
+};
+document.getElementById('cur-imp-btn').onclick=()=>document.getElementById('cur-imp-file').click();
+document.getElementById('cur-imp-file').addEventListener('change',e=>{
+  const files=[...e.target.files];if(!files.length)return;
+  const d=curStore.load();const ids=new Set(d.forms.map(f=>f.id));
+  let added=0,done=0;
+  files.forEach(f=>{
+    const rd=new FileReader();
+    rd.onload=()=>{
+      try{
+        const data=JSON.parse(rd.result);
+        const forms=Array.isArray(data)?data:(data.forms||(data.form?[data.form]:[]));
+        forms.forEach(x=>{if(x&&x.dept&&x.curator&&!ids.has(x.id)){d.forms.push(x);ids.add(x.id);added++;}});
+      }catch(err){alert('Не удалось импортировать '+f.name+': '+err.message);}
+      if(++done===files.length){
+        curStore.save(d);
+        document.getElementById('cur-imp-status').textContent='Импортировано форм: '+added+' (всего '+d.forms.length+')';
+        renderCurForms();
+      }
+    };
+    rd.readAsText(f);
+  });
+  e.target.value='';
+});
+document.getElementById('cur-clear').onclick=()=>{
+  if(!confirm('Удалить ВСЕ формы отделов из этого браузера?'))return;
+  localStorage.removeItem(CUR_LS);renderCurForms();
+  document.getElementById('cur-imp-status').textContent='Формы очищены.';
+};
+
+/* стартовые строки */
+for(let i=0;i<3;i++)addMetric();
+for(let i=0;i<2;i++)addProblem();
+addGrowth();
+renderCurForms();
+</script>
+<script>
 /* ═══════════ ДАШБОРД ═══════════ */
 function aggregate(subs){
   const perLink=LINKS.map(l=>{
@@ -784,12 +1154,16 @@ document.getElementById('clear').onclick=()=>{
 
 /* ── Роутер ── */
 function router(){
-  const dash=(location.hash||'#/').indexOf('#/svodka')===0;
-  document.getElementById('view-form').hidden=dash;
+  const h=location.hash||'#/';
+  const dash=h.indexOf('#/svodka')===0;
+  const curv=h.indexOf('#/curator')===0;
+  document.getElementById('view-form').hidden=dash||curv;
   document.getElementById('view-dash').hidden=!dash;
-  document.getElementById('nav-form').classList.toggle('on',!dash);
+  document.getElementById('view-curator').hidden=!curv;
+  document.getElementById('nav-form').classList.toggle('on',!dash&&!curv);
   document.getElementById('nav-dash').classList.toggle('on',dash);
-  if(dash)renderDash();else showStep(curStep);
+  document.getElementById('nav-cur').classList.toggle('on',curv);
+  if(dash)renderDash();else if(curv)renderCurForms();else showStep(curStep);
 }
 window.addEventListener('hashchange',router);
 document.querySelectorAll('.brand').forEach(b=>{b.style.cursor='pointer';b.addEventListener('click',()=>{location.hash='#/';});});
