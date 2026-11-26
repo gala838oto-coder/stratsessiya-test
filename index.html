@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#050810">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -122,12 +122,53 @@ input[type=text]:focus{outline:none;border-color:var(--cyan);}
 .formcard .dname{font-size:13px;font-weight:600;}
 .formcard .acts{display:flex;gap:6px;flex-shrink:0;}
 .formcard .acts .btn{padding:6px 10px;font-size:9px;}
+/* ── панель 5 шагов ТОС ── */
+.tocsteps{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
+@media(max-width:700px){.tocsteps{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:480px){.tocsteps{grid-template-columns:1fr 1fr;}}
+.tstep{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:8px 10px;}
+.tstep .tn{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;color:var(--faint);letter-spacing:.1em;}
+.tstep .tt{font-size:11px;font-weight:700;margin-top:3px;line-height:1.3;}
+.tstep .ts{font-size:9px;color:var(--faint);margin-top:2px;}
+.tstep.done{border-color:#34d39955;}
+.tstep.done .tn{color:var(--mint);}
+.tstep.now{border-color:var(--cyan);background:#22d3ee10;}
+.tstep.now .tn,.tstep.now .tt{color:var(--cyan);}
+/* ── табло звеньев ── */
+.linkgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;}
+@media(max-width:700px){.linkgrid{grid-template-columns:1fr 1fr;}}
+@media(max-width:480px){.linkgrid{grid-template-columns:1fr;}}
+.lcard{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:12px;cursor:pointer;position:relative;}
+.lcard:hover{border-color:var(--dim);}
+.lcard.sel{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan);}
+.lcard.crit{border-left:3px solid var(--red);}
+.lcard.watch{border-left:3px solid var(--amber);}
+.lcard.ok{border-left:3px solid var(--mint);}
+.lc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:6px;}
+.lc-id{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);}
+.lc-name{font-size:14px;font-weight:700;margin-top:2px;}
+.lc-cur{font-size:10px;color:var(--faint);margin-top:2px;}
+.lc-body{display:flex;align-items:center;gap:10px;margin-top:10px;}
+.lc-score{font-family:'JetBrains Mono',monospace;font-weight:800;font-size:26px;line-height:1;flex-shrink:0;}
+.lc-spark{flex:1;min-width:0;}
+.lc-spark svg{display:block;width:100%;height:30px;}
+.lc-kv{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);}
+.lc-kv b{color:var(--dim);font-weight:700;}
+.lc-flag{margin-top:8px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;
+  letter-spacing:.12em;color:var(--red);border:1px solid #f8717155;background:#f8717114;border-radius:4px;padding:4px;}
+/* ── детализация звена ── */
+.detsec{border-top:1px dashed var(--line);padding-top:10px;margin-top:12px;}
+.detsec:first-child{border-top:none;padding-top:0;margin-top:0;}
+.gapline{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:11px;line-height:1.5;color:var(--dim);
+  background:var(--panel2);border:1px solid var(--line-soft);border-radius:4px;padding:8px 10px;margin-bottom:6px;}
+.gapline b{font-family:'JetBrains Mono',monospace;}
+.minihead{font-size:10px;font-weight:800;letter-spacing:.1em;color:var(--faint);margin:0 0 6px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;}
 </style>
 </head>
 <body>
 <header>
   <div class="hwrap">
-    <div class="brand">СТРАТСЕССИЯ<small>тестовый сбор данных · v1.4</small></div>
+    <div class="brand">СТРАТСЕССИЯ<small>тестовый сбор данных · v1.5</small></div>
     <nav class="nav">
       <a href="#/" id="nav-form">АНКЕТА</a>
       <a href="#/curator" id="nav-cur">ОТДЕЛ</a>
@@ -352,7 +393,20 @@ input[type=text]:focus{outline:none;border-color:var(--cyan);}
       нет единого мнения, с каким настроем входит команда. Блок благодарностей — строго для модератора,
       группе на реальной сессии его не показываем.</p>
   </div>
+  <div class="panel">
+    <p class="minihead" style="margin-bottom:8px">5 шагов ТОС · фокус сессии</p>
+    <div class="tocsteps">
+      <div class="tstep done"><div class="tn">ШАГ 1 · ПРОЙДЕН</div><div class="tt">Найти ограничение</div><div class="ts">это делает дашборд</div></div>
+      <div class="tstep now"><div class="tn">ШАГ 2 · СЕЙЧАС</div><div class="tt">Максимально использовать сейчас</div><div class="ts">раскачать без бюджета</div></div>
+      <div class="tstep"><div class="tn">ШАГ 3</div><div class="tt">Подчинить остальное вперёд</div><div class="ts">все под ограничение</div></div>
+      <div class="tstep"><div class="tn">ШАГ 4</div><div class="tt">Расширить ограничение</div><div class="ts">ресурсный проект</div></div>
+      <div class="tstep"><div class="tn">ШАГ 5</div><div class="tt">Не дать инерции вернуться</div><div class="ts">новый цикл</div></div>
+    </div>
+    <p class="note" style="margin:10px 0 0">По ТОС система работает с одним ограничением за цикл. Сессия идёт по шагам —
+      сначала находим ограничение (это уже сделано до сессии), дальше обсуждаем, как его раскачать.</p>
+  </div>
   <div id="dash-body"></div>
+  <div id="link-detail"></div>
   <div class="panel">
     <h2 style="margin-bottom:10px">Данные для анализа</h2>
     <div class="actions">
@@ -443,6 +497,72 @@ function buildDemo(){
 }
 const DEMO_SUBS=buildDemo();
 const DEMO_MIN=4; /* меньше реальных анкет — сводка работает в демо-режиме */
+
+/* Демо-формы кураторов для компании-примера (та же детерминированная логика).
+   Заполняют табло звеньев и детализацию, пока реальные кураторы не внесли формы. */
+function buildDemoCur(){
+  const defs={
+    prod:{curator:'И. Сорокин',pf:72,
+      m:[['Выпуск, шт/мес',600,432],['Брак, %',3,7.8],['Срок цикла, дней',5,8.6]],
+      hyp:'Линия 2008 г., плановая профилактика срывается; не хватает двух наладчиков.',
+      q:'Брать ли вторую линию в аренду на пик сезона?',
+      prob:['Срыв сроков 40% заказов, третий квартал подряд; цена — неустойки ~900 тыс. ₽/квартал','Износ линии + кадровый голод в цехе'],
+      sol1:'Пересменка 2-го наладчика между сменами; профилактика по жёсткому графику — без бюджета, 2 недели',
+      sol2:'Аренда линии + найм 2 наладчиков — 3–6 месяцев, ~350 тыс. ₽/мес',
+      cross:['Снабжение привозит сырьё партиями по 5 дней — цех простаивает первую смену; 12% рабочего времени','Новая инициатива продаж (срочные заказы за 48ч) уронит план выпуска на 15%','Правило «заявка в снабжение за 3 дня» при цикле поставки 5 дней','Главная метрика «выпуск шт» растит запасы готовой продукции, которую продажи не вывозят']},
+    plan:{curator:'Д. Ким',pf:81,
+      m:[['План выполнен в срок, %',95,77],['Среднее согласование, дней',2,6]],
+      hyp:'План считается вручную, загрузка цеха видна только в конце месяца.',
+      q:'Внедрять ли сквозное планирование от ограничения?',
+      prob:['План выполнен в срок только на 77%, второй квартал','Ручной расчёт плана, нет видимости загрузки ограничения'],
+      sol1:'Еженедельный план от фактической загрузки цеха — 2 недели, без бюджета',
+      sol2:'ПО планирования — 3–6 месяцев',
+      cross:['Цех узнаёт план изменений за 2 дня — перенастройки съедают 8% мощности','Автоматизация отчётности увеличит нагрузку на цех на этапе внедрения','KPI плановика «% выполнения плана» провоцирует завышать план','Метрика «план в срок» ломается без данных о мощности ограничения в реальном времени']},
+    sales:{curator:'А. Волкова',pf:91,
+      m:[['Выручка, млн ₽/мес',12,11.2],['Конверсия, %',22,19]],
+      hyp:'Сроки отгрузки растут, конкурент берёт тех, кому мы не отвечаем за 2 дня.',
+      q:'Перестать ли обещать срок без проверки загрузки цеха?',
+      prob:['Потеряно 2 крупных заказа по срокам за квартал','Обещаем сроки без проверки загрузки цеха'],
+      sol1:'Запрет обещать срок без подтверждения планирования — немедленно, без бюджета',
+      sol2:'CRM с контролем сроков — 3–6 месяцев',
+      cross:['Производство не сообщает риски срыва заранее — узнаём от клиента','Акция на срочные заказы увеличит отказной поток для производства','KPI «выручка» без учёта маржинальности гонит менеджеров в демпинг','Рост выручки без роста прохода: запасы готовой продукции растут']},
+    supply:{curator:'М. Гареев',pf:96,
+      m:[['Закрыто заявок в срок, %',95,93],['Запас сырья, дней',10,14]],
+      hyp:'Единственный поставщик критичной позиции; цены растут, замены нет.',
+      q:'Нужен ли второй поставщик по критичным позициям, несмотря на +6% цены?',
+      prob:['Поставщик подвёл по срокам второй раз за полгода','Монополия на критичную позицию сырья'],
+      sol1:'Дублирующий поставщик на критичные позиции — 2 недели оформления',
+      sol2:'Контракт с штрафами и складом у поставщика — 3–6 месяцев',
+      cross:['Цех даёт заявки «на вчера», склад гоняет машины полупустыми','Увеличение страхового запаса заморозит ~1,5 млн ₽','Правило «только по заявке с подписью» режет мелкие срочные','Метрика «закрыто заявок» стимулирует закупать с запасом — растут вложения']},
+    logi:{curator:'Е. Панова',pf:88,
+      m:[['Отгрузка в срок, %',97,89],['Стоимость рейса, ₽',8200,9100]],
+      hyp:'Машины ждут комплектации на складе; маршруты собираются вручную.',
+      q:'Внедрять ли диспетчерскую очередь отгрузок от готовности заказа?',
+      prob:['Простой машин на складе до 4 часов, 6 дней в неделю','Ручная сборка маршрутов'],
+      sol1:'Очередь отгрузок по факту комплектации — 2 недели, без бюджета',
+      sol2:'Диспетчерская система — 3–6 месяцев',
+      cross:['Производство закрывает заказы после 16:00 — рейсы уходят пустыми','Новые интервалы доставки для клиентов потребуют ночной отгрузки','Штрафы водителей за простой конфликтуют с очередью склада','Метрика «отгрузка в срок» страдает от готовности продукции, не от логистики']},
+    fin:{curator:'О. Третьяк',pf:95,
+      m:[['Операционные затраты, млн ₽/мес',4.2,4.4],['DSO, дней',38,45]],
+      hyp:'Растут дебиторка и запасы; кассовые разрывы в конце квартала.',
+      q:'Вводить ли лимиты оплаты по срокам поставки вместо ручных согласований?',
+      prob:['DSO вырос с 38 до 45 дней за полгода','Дебиторка и запасы съедают оборотку'],
+      sol1:'Лимиты оплаты вместо ручных согласований — 2 недели',
+      sol2:'Факторинг/овердрафт под контракты — 3–6 месяцев',
+      cross:['Согласования занимают до 2 недель — срываем сроки смежникам','Автоматизация платежей требует чистой первички от всех отделов','Правило «два подписанта свыше 500 тыс.» тормозит срочные закупки','Метрика «затраты» режет профилактику цеха — растёт брак']}
+  };
+  return LINKS.map(l=>{
+    const d=defs[l.id];
+    return{id:'demo-cur-'+l.id,ts:'2026-11-20T10:00:00.000Z',dept:l.name,curator:d.curator,
+      ext:[],metrics:d.m.map((mm,i)=>({name:mm[0],plan:mm[1],fact:mm[2],
+        trend:i===0?'↓ падает':'↑ растёт',status:l.id==='prod'||l.id==='plan'?'Нужно решение на СС':'Закрывается внутри отдела',
+        hypothesis:d.hyp,question:d.q})),
+      problems:[{desc:d.prob[0],level:l.id==='prod'?'На всю систему':(l.id==='plan'?'На смежные звенья':'Локально (по отделу)'),
+        causes:d.prob[1],adjacent:'',sol1:d.sol1,sol2:d.sol2,compare:'Эксплуатация снимает остроту сразу; расширение решает причину, но требует бюджета и времени.'}],
+      growth:[],cross:d.cross.map(a=>({answer:a}))};
+  });
+}
+const DEMO_CUR=buildDemoCur();
 
 /* ── Хранилище ── */
 const store={
@@ -998,6 +1118,81 @@ function barRow(label,val,extra){
     (extra||'')+'</div>';
 }
 
+/* ── Табло звеньев + детализация причин ── */
+let selLinkId=null; /* звено, выбранное на табло */
+
+function spark(vals,color){ /* мини-график профиля звена */
+  const v=vals.filter(x=>x!=null);
+  if(v.length<2)return '<svg viewBox="0 0 60 24" preserveAspectRatio="none"><polyline points="0,12 60,12" fill="none" stroke="'+color+'" stroke-width="2" opacity=".35"/></svg>';
+  const mn=Math.min(...v),mx=Math.max(...v),rg=(mx-mn)||1;
+  const pts=v.map((x,i)=>(i/(v.length-1)*60).toFixed(1)+','+(20-((x-mn)/rg)*16).toFixed(1)).join(' ');
+  return '<svg viewBox="0 0 60 24" preserveAspectRatio="none"><polyline points="'+pts+'" fill="none" stroke="'+color+'" stroke-width="2" stroke-linecap="round"/></svg>';
+}
+function curFormFor(forms,name){
+  const n=String(name).trim().toLowerCase();
+  return forms.find(f=>f.dept&&String(f.dept).trim().toLowerCase()===n)||null;
+}
+
+function renderLinkDetail(a,formsCur){
+  const host=document.getElementById('link-detail');
+  const l=a.perLink.find(x=>x.id===selLinkId);
+  if(!l||l.mean==null){host.innerHTML='';return;}
+  const f=curFormFor(formsCur,l.name);
+  let h='<div class="panel">'+
+    '<div class="dhead"><div><div class="dname" style="font-size:16px">'+esc(l.name)+' — почему такой статус</div>'+
+    '<div class="dmeta">'+(f?'куратор: '+esc(f.curator)+' · ':'форма отдела не заполнена · ')+
+    'разброс мнений σ='+l.sigma.toFixed(1)+(l.sigma>=0.25?' — команда спорит':'')+'</div></div>'+
+    '<span class="tag '+l.tagCls+'">'+l.status+'</span></div>';
+
+  h+='<div class="detsec"><p class="minihead">Оценки по вопросам анкеты (0–100)</p>';
+  l.vals.forEach((v,qi)=>{h+=barRow(esc(Q[qi]),v);});
+  h+='</div>';
+
+  h+='<div class="detsec"><p class="minihead">Разрывы план–факт · форма «Состояние отдела»</p>';
+  if(f&&f.metrics&&f.metrics.length){
+    f.metrics.forEach(m=>{
+      const gap=(m.plan!=null&&m.fact!=null)?m.fact-m.plan:null;
+      const pct=(m.plan>0&&m.fact!=null)?Math.round(m.fact/m.plan*100):null;
+      const gc=gap==null?'var(--dim)':gap<0?'var(--red)':'var(--mint)';
+      const gapTxt=gap==null?'—':((gap>0?'+':'')+Math.round(gap*10)/10);
+      h+='<div class="gapline"><span style="flex-basis:100%"><b>'+esc(m.name)+'</b>'+(pct!=null?' · '+pct+'% плана':'')+'</span>'+
+        (gap!=null?'<span>разрыв <b style="color:'+gc+'">'+gapTxt+'</b></span>':'')+
+        (m.hypothesis?'<span style="flex-basis:100%">версия отдела: '+esc(m.hypothesis)+'</span>':'')+
+        (m.question?'<span style="flex-basis:100%">вопрос на СС: '+esc(m.question)+'</span>':'')+'</div>';
+    });
+    if(!f.metrics.length)h+='<p class="note">Метрики не внесены.</p>';
+  }else h+='<p class="note">Форма отдела не заполнена — попросите куратора заполнить страницу «ОТДЕЛ»: разрывы и версии причин появятся здесь автоматически.</p>';
+  h+='</div>';
+
+  h+='<div class="detsec"><p class="minihead">Проблемы отдела и варианты решений</p>';
+  if(f&&f.problems&&f.problems.length){
+    f.problems.forEach(p=>{
+      h+='<div class="textitem '+(p.level==='На всю систему'?'fear':'')+'"><b>'+esc(p.desc)+'</b>'+
+        (p.level?' <span class="dmeta">'+esc(p.level)+'</span>':'')+
+        (p.causes?'<br>Причины (версия отдела): '+esc(p.causes):'')+
+        (p.adjacent?'<br>Смежные причины: '+esc(p.adjacent):'')+
+        (p.sol1?'<br><b style="color:var(--mint)">1.</b> '+esc(p.sol1):'')+
+        (p.sol2?'<br><b style="color:var(--cyan)">2.</b> '+esc(p.sol2):'')+
+        (p.compare?'<br>Сравнение: '+esc(p.compare):'')+'</div>';
+    });
+  }else h+='<p class="note">Проблемы не внесены.</p>';
+  h+='</div>';
+
+  const hy=a.hyps.filter(x=>x.link===l.name&&x.text);
+  h+='<div class="detsec"><p class="minihead">Что говорят участники об этом звене</p>';
+  if(hy.length)hy.forEach(x=>{h+='<div class="textitem">'+esc(x.text)+'</div>';});
+  else h+='<p class="note">По этому звену гипотез участников нет.</p>';
+  h+='</div>';
+
+  if(f&&f.cross&&f.cross.some(c=>c.answer)){
+    h+='<div class="detsec"><p class="minihead">Кросс-функциональный контур · ответы отдела</p>';
+    f.cross.forEach((c,i)=>{if(c.answer)h+='<div class="textitem"><b>'+esc(CROSS_Q[i])+'</b><br>'+esc(c.answer)+'</div>';});
+    h+='</div>';
+  }
+  h+='</div>';
+  host.innerHTML=h;
+}
+
 function renderDash(){
   const host=document.getElementById('dash-body');
   const realSubs=store.load().subs;
@@ -1018,25 +1213,30 @@ function renderDash(){
   h+='<div class="stat"><div class="v">'+(a.weak?fmt(a.weak.mean,0):'—')+'</div><div class="l">его балл (0–100)</div></div>';
   h+='</div>';
 
-  /* Карта звеньев */
-  h+='<div class="panel"><h2 style="margin-bottom:10px">Карта звеньев цепочки создания ценности (0–100)</h2>';
-  a.ranked.forEach(l=>{
-    h+='<div class="dcard" style="border-left-color:'+colorOf(l.mean)+'">'+
-      '<div class="dhead"><span class="dname">'+esc(l.name)+'</span>'+
+  /* Табло звеньев: карточки с графиком, статусом и куратором; клик → детализация причин */
+  const formsCur=demoOn?DEMO_CUR:curStore.load().forms;
+  h+='<div class="panel"><p class="minihead" style="margin-bottom:10px">Табло звеньев · клик по окну — детализация: почему так</p><div class="linkgrid">';
+  a.ranked.forEach((l,li)=>{
+    const f=curFormFor(formsCur,l.name);
+    const cls=l.mean<45?'crit':l.mean<65?'watch':'ok';
+    const pf=f&&f.metrics&&f.metrics.length?
+      Math.round(f.metrics.reduce((s,m)=>s+((m.plan>0&&m.fact!=null)?m.fact/m.plan*100:0),0)/f.metrics.length):null;
+    h+='<div class="lcard '+cls+(selLinkId===l.id?' sel':'')+'" data-link="'+l.id+'">'+
+      '<div class="lc-top"><div><div class="lc-id">0'+(li+1)+'</div>'+
+      '<div class="lc-name">'+esc(l.name)+'</div>'+
+      '<div class="lc-cur">'+(f?'куратор: '+esc(f.curator):'форма отдела не заполнена')+'</div></div>'+
       '<span class="tag '+l.tagCls+'">'+l.status+'</span></div>'+
-      '<div style="display:flex;align-items:center;gap:10px;margin-top:8px">'+
-      '<div class="bar" style="flex:1"><i style="width:'+l.mean.toFixed(0)+'%;background:'+colorOf(l.mean)+'"></i></div>'+
-      '<span class="mono" style="font-size:12px;font-weight:800;color:'+colorOf(l.mean)+'">'+fmt(l.mean,0)+'</span></div>'+
-      '<div class="dmeta" style="margin-top:6px">'+(l.sigma>=2.5?'⚠ разброс мнений σ='+l.sigma.toFixed(1)+' — команда спорит':'σ='+l.sigma.toFixed(1))+'</div></div>';
+      '<div class="lc-body"><div class="lc-score" style="color:'+colorOf(l.mean)+'">'+fmt(l.mean,0)+'</div>'+
+      '<div class="lc-spark">'+spark(l.vals,colorOf(l.mean))+'</div></div>'+
+      '<div class="lc-kv"><span>σ <b>'+l.sigma.toFixed(1)+'</b></span>'+
+      (pf!=null?'<span>П/Ф <b>'+pf+'%</b></span>':'')+
+      (f&&f.problems?'<span>проблем <b>'+f.problems.length+'</b></span>':'')+'</div>'+
+      (a.weak&&a.weak.id===l.id?'<div class="lc-flag">ОГРАНИЧЕНИЕ СИСТЕМЫ</div>':'')+
+      '</div>';
   });
-  h+='<p class="note">Сортировка от худшего. По TOC фокус сессии — одно звено-кандидат, а не «всё сразу». '+
-    '⚠ σ≥2,5 — покажите разброс на сессии: спор оценок — сам по себе данные.</p>';
-  const detail=a.ranked.find(l=>l.sigma>=2.5)||a.ranked[0];
-  if(detail){
-    h+='<h3 class="sub">Детализация: '+esc(detail.name)+'</h3>';
-    detail.vals.forEach((v,qi)=>{h+=barRow(esc(Q[qi]),v);});
-  }
-  h+='</div>';
+  h+='</div><p class="note" style="margin:10px 0 0">Балл — средняя оценка звена по анкете (0–100), график — её профиль по вопросам. '+
+    'П/Ф — средний процент выполнения плана по форме отдела. ⚠ σ≥0,25 — команда спорит: покажите разброс на сессии, спор оценок — сам по себе данные. '+
+    'По ТОС фокус — одно звено, а не «всё сразу».</p></div>';
 
   /* Гипотезы */
   h+='<div class="panel"><h2 style="margin-bottom:10px">Гипотезы об узком месте</h2>';
@@ -1100,13 +1300,21 @@ function renderDash(){
   h+='<p class="note">Все ответы анонимны; данные лежат в браузере участника и у модератора. '+
     (demoOn?'Выгрузка содержит только реальные анкеты — сейчас их '+realSubs.length+'.':'')+'</p>';
   host.innerHTML=h;
+  /* клик по окну звена → выбор + детализация причин */
+  if(!selLinkId||!a.ranked.some(l=>l.id===selLinkId))selLinkId=a.weak?a.weak.id:(a.ranked[0]?a.ranked[0].id:null);
+  host.querySelectorAll('.lcard').forEach(c=>{
+    c.onclick=()=>{selLinkId=c.dataset.link;
+      host.querySelectorAll('.lcard').forEach(x=>x.classList.toggle('sel',x.dataset.link===selLinkId));
+      renderLinkDetail(a,formsCur);};
+  });
+  renderLinkDetail(a,formsCur);
 }
 
 /* ── Экспорт / импорт / очистка ── */
 document.getElementById('exp-json').onclick=()=>{
-  const payload={meta:{app:'stratsessiya-test',version:'1.3',exportedAt:new Date().toISOString(),
+  const payload={meta:{app:'stratsessiya-test',version:'1.5',exportedAt:new Date().toISOString(),
     links:LINKS,questions:Q,scale:'1..10',reverseIndices:REV,
-    normalization:'mean(effective scores)*10',thresholds:{constraint:45,watch:65},sigmaFlag:2.5,
+    normalization:'mean(effective scores)*10',thresholds:{constraint:45,watch:65},sigmaFlag:0.25,
     types:TYPES,directions:DIRS,resource:RESOURCE},
     submissions:store.load().subs};
   download(payload,'stratsessiya-export-'+new Date().toISOString().slice(0,10)+'.json','application/json');
